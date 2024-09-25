@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShockHell {
-  internal class PiShockManager {
+﻿namespace ShockHell {
+  class PiShockManager {
+    public string Username;
+    public string APIKey;
+    public string Code;
   }
 }
