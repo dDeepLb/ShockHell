@@ -4,9 +4,9 @@ using UnityEngine;
 namespace ShockHell {
   class PiShockManager {
     private static PiShockManager instance;
-    private static string Username;
-    private static string APIKey;
-    private static string Code;
+    public static string Username { get; set; }
+    public static string APIKey { get; set; }
+    public static string Code { get; set; }
     private static readonly SimpleConfig Config = new SimpleConfig(Path.Combine(Application.persistentDataPath, "ShockHell.cfg"));
 
     public static PiShockManager Instance {

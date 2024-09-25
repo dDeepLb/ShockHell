@@ -9,14 +9,12 @@ namespace ShockHell {
 
     private Rect GUIScreen = new Rect(GUIXOffset, GUIYOffset, GUIWidth, GUIHeight);
 
-    private PiShockManager PiShockManager = new PiShockManager();
-
     public void DrawGUI() {
       GUI.skin = ModAPI.Interface.Skin;
       GUIScreen = GUILayout.Window(0, GUIScreen, DrawWindow, "Shock Hell");
     }
 
-    public void DrawWindow(int windowID) {
+    public static void DrawWindow(int windowID) {
       using (new GUILayout.VerticalScope("API Connection", GUI.skin.box)) {
         GUILayout.Space(GUIHeight * 0.02f);
         using (new GUILayout.VerticalScope(GUILayout.Width(GUIHeight * 0.35f))) {
