@@ -34,4 +34,20 @@ namespace ShockHell {
       Code = Config.GetValue("Auth", "Code", "");
     }
   }
+
+  public enum PiShockOperations {
+    Shock = 0,
+    Vibrate = 1,
+    Beep = 2
+  }
+
+  public class PiShockRequestModel {
+    public string Username { get; set; }
+    public string Apikey { get; set; }
+    public string Code { get; set; }
+    public string Name { get; set; }
+    public int Intensity { get; set; }
+    public int Duration { get; set; }
+    public PiShockOperations Op { get; set; }
+  }
 }
