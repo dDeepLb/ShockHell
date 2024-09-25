@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 namespace ShockHell {
-  class AddMyGameObject : Player {
+  class PlayerExtended : Player {
     protected override void Start() {
       base.Start();
       new GameObject("__ShockHell__").AddComponent<ShockHell>();
