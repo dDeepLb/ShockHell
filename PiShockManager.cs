@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 
-﻿namespace ShockHell {
+namespace ShockHell {
   class PiShockManager {
     public string Username;
     public string APIKey;
