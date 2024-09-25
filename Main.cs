@@ -13,6 +13,7 @@ namespace ShockHell {
     private ShockHellGUI GUI = null;
 
     private void Start() {
+      ModAPI.Log.Write("Initing ShockHell");
       GUI = new ShockHellGUI();
     }
 
