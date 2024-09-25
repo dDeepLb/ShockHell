@@ -4,8 +4,9 @@ using UnityEngine;
 namespace ShockHell {
   class PiShockManager {
     public string Username;
-    public string APIKey;
-    public string Code;
+    private static string Username;
+    private static string APIKey;
+    private static string Code;
 
     public SimpleConfig Config = null;
 
@@ -19,7 +20,7 @@ namespace ShockHell {
       ModAPI.Log.Write($"Loaded PiSHock Auth at {configPath}");
     }
 
-    public void SaveAuthConfig() {
+    public static void SaveAuthConfig() {
       ModAPI.Log.Write("Saving PiShock Auth");
       Config.SetValue("Auth", "Username", Username);
       Config.SetValue("Auth", "APIKey", APIKey);
@@ -27,7 +28,7 @@ namespace ShockHell {
       Config.SaveConfig();
     }
 
-    public void LoadAuthConfig() {
+    public static void LoadAuthConfig() {
       ModAPI.Log.Write("Loading PiShock Auth");
       Username = Config.GetValue("Auth", "Username", "");
       APIKey = Config.GetValue("Auth", "APIKey", "");
