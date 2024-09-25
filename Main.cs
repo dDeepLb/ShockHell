@@ -21,7 +21,7 @@ namespace ShockHell {
       if (Input.GetKeyDown(KeyCode.Backslash)) {
         ShowUI = !ShowUI;
 
-        GUI.EnableCursor(ShowUI);
+        ShockHellGUI.EnableCursor(ShowUI);
       }
     }
 

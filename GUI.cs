@@ -43,7 +43,7 @@ namespace ShockHell {
       }
     }
 
-    public void EnableCursor(bool enableCursor) {
+    public static void EnableCursor(bool enableCursor) {
       CursorManager.Get().ShowCursor(enableCursor, false);
       Player player = Player.Get();
 
