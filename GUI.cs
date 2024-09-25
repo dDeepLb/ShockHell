@@ -37,6 +37,7 @@ namespace ShockHell {
           GUILayout.Space(GUIHeight * 0.02f);
 
           if (GUILayout.Button("Submit")) {
+            PiShockManager.SaveAuthConfig();
           }
         }
       }
