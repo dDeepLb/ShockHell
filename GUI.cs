@@ -29,7 +29,7 @@ namespace ShockHell {
 
             using (new GUILayout.VerticalScope()) {
               PiShockManager.Username = GUILayout.TextField(PiShockManager.Username, 32);
-              PiShockManager.APIKey = GUILayout.TextField(PiShockManager.APIKey, 32);
+              PiShockManager.APIKey = GUILayout.TextField(PiShockManager.APIKey, 36);
               PiShockManager.Code = GUILayout.TextField(PiShockManager.Code, 32);
             }
           }
