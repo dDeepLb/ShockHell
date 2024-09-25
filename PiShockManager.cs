@@ -3,17 +3,25 @@ using UnityEngine;
 
 namespace ShockHell {
   class PiShockManager {
-    public string Username;
+    private static PiShockManager instance;
     private static string Username;
     private static string APIKey;
     private static string Code;
+    private static readonly SimpleConfig Config = new SimpleConfig(Path.Combine(Application.persistentDataPath, "ShockHell.cfg"));
 
-    public SimpleConfig Config = null;
+    public static PiShockManager Instance {
+      get {
+        if (instance == null) {
+          instance = new PiShockManager();
+        }
+        return instance;
+      }
+    }
 
-    public PiShockManager() {
+    private PiShockManager() {
       ModAPI.Log.Write("Initing PiShock Manager");
-      string configPath = Path.Combine(Application.persistentDataPath, "ShockHell.cfg");
-      Config = new SimpleConfig(configPath);
+      LoadAuthConfig();
+    }
 
       LoadAuthConfig();
 
