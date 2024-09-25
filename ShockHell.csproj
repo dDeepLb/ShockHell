@@ -329,6 +329,7 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="GUI.cs" />
+    <Compile Include="SimpleHttpClient.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="PiShockManager.cs" />
   </ItemGroup>
