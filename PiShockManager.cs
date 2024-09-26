@@ -2,31 +2,12 @@
 using UnityEngine;
 
 namespace ShockHell {
-  class PiShockManager {
-    private static PiShockManager instance;
+  static class PiShockManager {
     public static string Username { get; set; }
     public static string APIKey { get; set; }
     public static string Code { get; set; }
     private static readonly SimpleConfig Config = new SimpleConfig(Path.Combine(Application.persistentDataPath, "ShockHell.cfg"));
 
-    public static PiShockManager Instance {
-      get {
-        if (instance == null) {
-          instance = new PiShockManager();
-        }
-        return instance;
-      }
-    }
-
-    private PiShockManager() {
-      ModAPI.Log.Write("Initing PiShock Manager");
-      LoadAuthConfig();
-    }
-
-      LoadAuthConfig();
-
-      ModAPI.Log.Write($"Loaded PiSHock Auth at {configPath}");
-    }
 
     public static void SaveAuthConfig() {
       ModAPI.Log.Write("Saving PiShock Auth");
