@@ -3,8 +3,8 @@ using System.IO;
 
 namespace ShockHell {
   public class SimpleConfig {
-    private Dictionary<string, Dictionary<string, string>> configData;
-    private string filePath;
+    private readonly Dictionary<string, Dictionary<string, string>> configData;
+    private readonly string filePath;
 
     public SimpleConfig(string filePath) {
       this.filePath = filePath;
@@ -23,11 +23,11 @@ namespace ShockHell {
       foreach (string line in lines) {
         string trimmedLine = line.Trim();
 
-        if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith(";") || trimmedLine.StartsWith("#")) {
+        if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith(';') || trimmedLine.StartsWith('#')) {
           continue;
         }
 
-        if (trimmedLine.StartsWith("[") && trimmedLine.EndsWith("]")) {
+        if (trimmedLine.StartsWith('[') && trimmedLine.EndsWith(']')) {
           currentSection = trimmedLine.Substring(1, trimmedLine.Length - 2).Trim();
           if (!configData.ContainsKey(currentSection)) {
             configData[currentSection] = new Dictionary<string, string>();

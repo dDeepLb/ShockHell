@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 
 namespace ShockHell {
-  class ShockHellGUI {
+  static class ShockHellGui {
     private static float GUIXOffset = 50f;
     private static float GUIYOffset = 50f;
     private static float GUIWidth = Screen.width - GUIXOffset * 2f;
     private static float GUIHeight = Screen.height - GUIYOffset * 2f;
 
-    private Rect GUIScreen = new Rect(GUIXOffset, GUIYOffset, GUIWidth, GUIHeight);
+    private static Rect GUIScreen = new Rect(GUIXOffset, GUIYOffset, GUIWidth, GUIHeight);
 
-    public void DrawGUI() {
+    public static void DrawGUI() {
       GUI.skin = ModAPI.Interface.Skin;
       GUIScreen = GUILayout.Window(0, GUIScreen, DrawWindow, "Shock Hell");
     }
