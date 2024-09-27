@@ -17,7 +17,7 @@ namespace ShockHell {
     public static void DrawWindow(int windowID) {
       using (new GUILayout.VerticalScope("API Connection", GUI.skin.box)) {
         GUILayout.Space(GUIHeight * 0.02f);
-        using (new GUILayout.VerticalScope(GUILayout.Width(GUIHeight * 0.35f))) {
+        using (new GUILayout.VerticalScope(GUILayout.Width(GUIWidth * 0.25f))) {
           using (new GUILayout.HorizontalScope()) {
             using (new GUILayout.VerticalScope()) {
               GUILayout.Label("PiShock Username");
