@@ -334,11 +334,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config.cs" />
-    <Compile Include="GUI.cs" />
-    <Compile Include="PiShockEventsTriggers.cs" />
-    <Compile Include="Main.cs" />
-    <Compile Include="PiShockManager.cs" />
+    <Compile Include="src\Config.cs" />
+    <Compile Include="src\GUI.cs" />
+    <Compile Include="src\PiShockEventsTriggers.cs" />
+    <Compile Include="src\Main.cs" />
+    <Compile Include="src\PiShockManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
