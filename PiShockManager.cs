@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System.IO;
+﻿using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace ShockHell {
   static class PiShockManager {
@@ -42,22 +42,20 @@ namespace ShockHell {
       Code = Config.GetValue("Auth", "Code", "");
     }
 
-    private static string CreatePiShockPayload(PiShockOperations operation, int intensity, int duration) {
-      PiShockRequestModel pishockRequest = new PiShockRequestModel() {
-        Username = Username,
-        Apikey = APIKey,
-        Code = Code,
-        Name = "ShockHell",
-        Intensity = intensity,
-        Duration = duration,
-        Op = operation
-      };
-      return JsonConvert.SerializeObject(pishockRequest);
-    }
-
     private static void SendPiShockRequest(PiShockOperations operation, int intensity, int duration) {
-      string payload = CreatePiShockPayload(operation, intensity, duration);
-      SimpleHttpClient.Post(ApiUrl, payload);
+      WWWForm payload = new WWWForm();
+      payload.AddField("Username", Username);
+      payload.AddField("Apikey", APIKey);
+      payload.AddField("Code", Code);
+      payload.AddField("Name", "ShockHell");
+      payload.AddField("Op", (int) operation);
+      if (intensity > 0) payload.AddField("Intensity", intensity);
+      payload.AddField("duration", duration);
+
+      UnityWebRequest request = UnityWebRequest.Post(ApiUrl, payload);
+      request.SendWebRequest();
+
+      ModAPI.Log.Write(request.result);
     }
   }
 
@@ -65,15 +63,5 @@ namespace ShockHell {
     Shock = 0,
     Vibrate = 1,
     Beep = 2
-  }
-
-  public class PiShockRequestModel {
-    public string Username { get; set; }
-    public string Apikey { get; set; }
-    public string Code { get; set; }
-    public string Name { get; set; }
-    public int Intensity { get; set; }
-    public int Duration { get; set; }
-    public PiShockOperations Op { get; set; }
   }
 }
