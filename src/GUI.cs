@@ -7,6 +7,8 @@ namespace ShockHell {
     private static float GUIWidth = Screen.width - GUIXOffset * 2f;
     private static float GUIHeight = Screen.height - GUIYOffset * 2f;
 
+    private static float AuthBoxWidth = GUIWidth / 4;
+
     private static Rect GUIScreen = new Rect(GUIXOffset, GUIYOffset, GUIWidth, GUIHeight);
 
     public static void DrawGUI() {
@@ -17,8 +19,10 @@ namespace ShockHell {
     public static void DrawWindow(int windowID) {
       using (new GUILayout.VerticalScope("API Connection", GUI.skin.box)) {
         GUILayout.Space(GUIHeight * 0.02f);
-        using (new GUILayout.VerticalScope(GUILayout.Width(GUIWidth * 0.25f))) {
           using (new GUILayout.HorizontalScope()) {
+          GUILayout.Space(GUIWidth / 2 - AuthBoxWidth / 2);
+          using (new GUILayout.VerticalScope(GUI.skin.box, GUILayout.Width(AuthBoxWidth))) {
+            using (new GUILayout.HorizontalScope()) {
             using (new GUILayout.VerticalScope()) {
               GUILayout.Label("PiShock Username");
               GUILayout.Label("PiShock API Key");
@@ -36,6 +40,7 @@ namespace ShockHell {
 
           if (GUILayout.Button("Submit")) {
             PiShockManager.SaveAuthConfig();
+          }
           }
         }
       }
