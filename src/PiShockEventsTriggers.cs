@@ -6,10 +6,10 @@
       float damage = info.m_Damage;
 
       if (m_HP > 0) {
-        PiShockManager.Shock((int) damage, 1);
+        PiShockManager.Instance.Shock((int) damage, 1);
       } else {
-        PiShockManager.Shock(100, 1);
-        PiShockManager.Shock(50, 3);
+        PiShockManager.Instance.Shock(100, 1);
+        PiShockManager.Instance.Shock(50, 3);
       }
     }
   }
