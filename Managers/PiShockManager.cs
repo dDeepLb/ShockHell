@@ -67,16 +67,7 @@ namespace ShockHell.Managers {
       ModAPI.Log.Write($"Shock for {duration} seconds at {intensity} power");
       ModAPI.Log.Write("Starting Shock coroutine.");
       ModAPI.Log.Write("Sending PiShock Request");
-      var json = $@"
-      {{
-        ""Username"": ""dDeepLb"",
-        ""Apikey"": ""a8be78db-0bc6-425a-9f3a-289e3137cbb2"",
-        ""Code"": ""2E86526CD40"",
-        ""Name"": ""ShockHell"",
-        ""Op"": ""{operation}"",
-        ""Intensity"": ""{intensity}"",
-        ""Duration"": ""{duration}""
-      }}";
+      string json = CreateJsonPayload(operation, intensity, duration);
 
       ModAPI.Log.Write($"POST Request form data" +
         $"\n{nameof(ApiUrl)}: {ApiUrl}" +
@@ -94,16 +85,7 @@ namespace ShockHell.Managers {
       ModAPI.Log.Write($"Vibrating for {duration} seconds at {intensity} power!");
       ModAPI.Log.Write("Starting Vibrate coroutine.");
       ModAPI.Log.Write("Sending PiShock Request");
-      var json = $@"
-      {{
-        ""Username"": ""dDeepLb"",
-        ""Apikey"": ""a8be78db-0bc6-425a-9f3a-289e3137cbb2"",
-        ""Code"": ""2E86526CD40"",
-        ""Name"": ""ShockHell"",
-        ""Op"": ""{operation}"",
-        ""Intensity"": ""{intensity}"",
-        ""Duration"": ""{duration}""
-      }}";
+      string json = CreateJsonPayload(operation, intensity, duration);
 
       ModAPI.Log.Write($"POST Request JSON" +
         $"\n{nameof(ApiUrl)}: {ApiUrl}" +
@@ -120,15 +102,7 @@ namespace ShockHell.Managers {
       ModAPI.Log.Write($"Beep for {duration} seconds!");
       ModAPI.Log.Write("Starting Beep coroutine.");
       ModAPI.Log.Write("Sending PiShock Request");
-      var json = $@"
-      {{
-        ""Username"": ""dDeepLb"",
-        ""Apikey"": ""a8be78db-0bc6-425a-9f3a-289e3137cbb2"",
-        ""Code"": ""2E86526CD40"",
-        ""Name"": ""ShockHell"",
-        ""Op"": ""{operation}"",
-        ""Duration"": ""{duration}""
-      }}";
+      string json = CreateJsonPayload(operation, 0, duration);
 
       ModAPI.Log.Write($"POST Request JSON" +
         $"\n{nameof(ApiUrl)}: {ApiUrl}" +
@@ -136,6 +110,19 @@ namespace ShockHell.Managers {
 
       StartCoroutine(SendPiShockRequest(json));
       ModAPI.Log.Write($"Response: {ResponseText}");
+    }
+
+    private static string CreateJsonPayload(int operation, int intensity, int duration) {
+      return $@"
+      {{
+        ""Username"": ""dDeepLb"",
+        ""Apikey"": ""a8be78db-0bc6-425a-9f3a-289e3137cbb2"",
+        ""Code"": ""2E86526CD40"",
+        ""Name"": ""ShockHell"",
+        ""Op"": ""{operation}"",
+        ""Intensity"": ""{intensity}"",
+        ""Duration"": ""{duration}""
+      }}";
     }
 
     public void SaveAuthConfig() {
