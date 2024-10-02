@@ -14,14 +14,14 @@ namespace ShockHell.Managers
     public string Apikey { get; set; } = string.Empty ;
     public string Code { get; set; } = string.Empty;
 
-    private static readonly string ApiUrl = $"https://do.pishock.com/api/apioperate/";
-    private static readonly string LocalSimpleConfigPath = Path.Combine(Application.persistentDataPath, $"{nameof(ShockHell)}.cfg");
-    
+    private static readonly string ApiUrl = $"https://do.pishock.com/api/apioperate/";    
+  
     private static PiShockManager Instance;
     private SimpleConfig LocalSimpleConfig;
 
     public PiShockManager()
     {
+      LocalSimpleConfig = new SimpleConfig();
       Instance = this;
     }
 
@@ -65,7 +65,7 @@ namespace ShockHell.Managers
     {
       if (LocalSimpleConfig == null)
       {
-        LocalSimpleConfig = new SimpleConfig(LocalSimpleConfigPath);
+        LocalSimpleConfig = new SimpleConfig();
         ModAPI.Log.Write($"{nameof(PiShockManager)}.{nameof(LocalSimpleConfig)} instantiated!");
       }      
     }
@@ -74,13 +74,36 @@ namespace ShockHell.Managers
     {
       intensity = Mathf.Clamp(intensity, 1, 100);
       duration = Mathf.Clamp(duration, 1, 15);
+      var operation = PiShockOperations.Shock;
 
-      ModAPI.Log.Write($"Shock! for {duration} seconds at {intensity} power");
+      ModAPI.Log.Write($"Shock for {duration} seconds at {intensity} power");
 
       if (Instance != null)
       {
         ModAPI.Log.Write("Starting Shock coroutine.");
-        StartCoroutine(SendPiShockRequest(PiShockOperations.Shock, intensity, duration));
+        ModAPI.Log.Write("Sending PiShock Request");
+        List<IMultipartFormSection> formData = new List<IMultipartFormSection> {
+            new MultipartFormDataSection(nameof(Username), Username),
+            new MultipartFormDataSection(nameof(Apikey), Apikey),
+            new MultipartFormDataSection(nameof(Code), Code),
+            new MultipartFormDataSection("Name", nameof(ShockHell)),
+            new MultipartFormDataSection("Op", operation.ToString()),
+            new MultipartFormDataSection("Intensity", intensity.ToString()),
+            new MultipartFormDataSection("Duration", duration.ToString())
+        };
+
+        ModAPI.Log.Write($"POST Request form data" +
+          $"\n{nameof(ApiUrl)}: {ApiUrl}" +
+          $"\n{nameof(formData)}:" +
+          $"\n\t{nameof(Username)}: {Username}" +
+          $"\n\t{nameof(Apikey)}: {Apikey}" +
+          $"\n\t{nameof(Code)}: {Code}" +
+          $"\n\tName: {nameof(ShockHell)}" +
+          $"\n\tOp: {operation}" +
+          $"\n\tIntensity: {intensity}" +
+          $"\n\tDuration: : {duration}");
+
+        StartCoroutine(SendPiShockRequest(formData));
       }
       else
       {
@@ -91,17 +114,69 @@ namespace ShockHell.Managers
     public void Vibrate(int intensity, int duration)
     {
       intensity = Mathf.Clamp(intensity, 1, 100);
+      duration = Mathf.Clamp(duration, 1, 15);
+      var operation = PiShockOperations.Vibrate;
 
       ModAPI.Log.Write($"Vibrating for {duration} seconds at {intensity} power!");
 
-      StartCoroutine(SendPiShockRequest(PiShockOperations.Vibrate, intensity, duration));
+      ModAPI.Log.Write("Starting Vibrate coroutine.");
+      ModAPI.Log.Write("Sending PiShock Request");
+      List<IMultipartFormSection> formData = new List<IMultipartFormSection> {
+            new MultipartFormDataSection(nameof(Username), Username),
+            new MultipartFormDataSection(nameof(Apikey), Apikey),
+            new MultipartFormDataSection(nameof(Code), Code),
+            new MultipartFormDataSection("Name", nameof(ShockHell)),
+            new MultipartFormDataSection("Op", operation.ToString()),
+            new MultipartFormDataSection("Intensity", intensity.ToString()),
+            new MultipartFormDataSection("Duration", duration.ToString())
+      };
+
+      ModAPI.Log.Write($"POST Request form data" +
+        $"\n{nameof(ApiUrl)}: {ApiUrl}" +
+        $"\n{nameof(formData)}:" +
+        $"\n\t{nameof(Username)}: {Username}" +
+        $"\n\t{nameof(Apikey)}: {Apikey}" +
+        $"\n\t{nameof(Code)}: {Code}" +
+        $"\n\tName: {nameof(ShockHell)}" +
+        $"\n\tOp: {operation}" +
+        $"\n\tIntensity: {intensity}" +
+        $"\n\tDuration: : {duration}");
+
+      StartCoroutine(SendPiShockRequest(formData));
     }
 
     public void Beep(int duration)
     {
+      int intensity = 0;
+      duration = Mathf.Clamp(duration, 1, 15);
+      var operation = PiShockOperations.Beep;
+
       ModAPI.Log.Write($"Beep for {duration} seconds!");
 
-      StartCoroutine(SendPiShockRequest(PiShockOperations.Beep, 0, duration));
+      ModAPI.Log.Write("Starting Beep coroutine.");
+      ModAPI.Log.Write("Sending PiShock Request");
+      List<IMultipartFormSection> formData = new List<IMultipartFormSection> {
+       new MultipartFormDataSection(nameof(Username), Username),
+       new MultipartFormDataSection(nameof(Apikey), Apikey),
+       new MultipartFormDataSection(nameof(Code), Code),
+       new MultipartFormDataSection("Name", nameof(ShockHell)),
+       new MultipartFormDataSection("Op", operation.ToString()),
+       new MultipartFormDataSection("Intensity", intensity.ToString()),
+       new MultipartFormDataSection("Duration", duration.ToString())
+      };
+
+      ModAPI.Log.Write($"POST Request form data" +
+        $"\n{nameof(ApiUrl)}: {ApiUrl}" +
+        $"\n{nameof(formData)}:" +
+        $"\n\t{nameof(Username)}: {Username}" +
+        $"\n\t{nameof(Apikey)}: {Apikey}" +
+        $"\n\t{nameof(Code)}: {Code}" +
+        $"\n\tName: {nameof(ShockHell)}" +
+        $"\n\tOp: {operation}" +
+        $"\n\tIntensity: {intensity}" +
+        $"\n\tDuration: : {duration}");
+
+      StartCoroutine(SendPiShockRequest(formData));
     }
 
     public void SaveAuthConfig()
@@ -118,41 +193,16 @@ namespace ShockHell.Managers
     {
       InitData();
       ModAPI.Log.Write("Loading PiShock Auth");
-      LocalSimpleConfig.LoadOrCreateConfig(LocalSimpleConfigPath);
+      LocalSimpleConfig.InitConfig();
       Username = LocalSimpleConfig.GetValue("Auth", nameof(Username), "");
       Apikey = LocalSimpleConfig.GetValue("Auth", nameof(Apikey), "");
       Code = LocalSimpleConfig.GetValue("Auth", nameof(Code), "");
     }
 
-    private IEnumerator SendPiShockRequest(PiShockOperations operation, int intensity, int duration)
+    private IEnumerator SendPiShockRequest(List<IMultipartFormSection> form)
     {
-      ModAPI.Log.Write("Sending PiShock Request");
-      List<IMultipartFormSection> formData = new List<IMultipartFormSection> {
-            new MultipartFormDataSection(nameof(Username), Username),
-            new MultipartFormDataSection(nameof(Apikey), Apikey),
-            new MultipartFormDataSection(nameof(Code), Code),
-            new MultipartFormDataSection("Name", nameof(ShockHell)),
-            new MultipartFormDataSection("Op", operation.ToString()),
-            new MultipartFormDataSection("Intensity", intensity.ToString()),
-            new MultipartFormDataSection("Duration", duration.ToString()),
-      };
-
-      ModAPI.Log.Write($"POST Request" +
-        $"\n{nameof(ApiUrl)}: {ApiUrl}" +
-        $"\n{nameof(formData)}:" +
-        $"\n\t{nameof(Username)}: {Username}" +
-        $"\n\t{nameof(Apikey)}: {Apikey}" +
-        $"\n\t{nameof(Code)}: {Code}" +
-        $"\n\tName: {nameof(ShockHell)}" +
-        $"\n\tOp: {operation}" + 
-        $"\n\tIntensity: {intensity}" +
-        $"\n\tDuration: : {duration}");
-
-      using (UnityWebRequest request = UnityWebRequest.Post(ApiUrl, formData))
+      using (UnityWebRequest request = UnityWebRequest.Post(ApiUrl, form))
       {
-        request.SetRequestHeader("Content-Type", "application/json");
-        ModAPI.Log.Write(request.GetResponseHeaders());
-
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
@@ -162,6 +212,8 @@ namespace ShockHell.Managers
         else
         {
           ModAPI.Log.Write("Response: " + request.downloadHandler.text);
+
+          ModAPI.Log.Write(request.GetResponseHeaders());
         }
       }
     }

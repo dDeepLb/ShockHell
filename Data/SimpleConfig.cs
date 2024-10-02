@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System;
+using UnityEngine;
 
 namespace ShockHell.Data
 {
@@ -8,44 +10,43 @@ namespace ShockHell.Data
   /// </summary>
   public class SimpleConfig
   {
-    private Dictionary<string, Dictionary<string, string>> LocalConfigData { get; set; }
-    private string LocalFilePath { get; set; }
+    public Dictionary<string, Dictionary<string, string>> LocalConfigData { get; private set; }
+    public string LocalFilePath { get; private set; }
 
-    public SimpleConfig(string filePath)
-    {
-      if (string.IsNullOrWhiteSpace(filePath))
-      {
-        ModAPI.Log.Write($"Could not create instance of {nameof(SimpleConfig)} - ArgumentNull exception on ctor: {nameof(SimpleConfig)} {nameof(filePath)} was empty!");
-        return;
-      }
-      LocalFilePath = filePath;
+    public SimpleConfig()
+    {     
+      LocalFilePath = Path.Combine(Application.dataPath.Replace("GH_Data", "Mods"), $"{nameof(ShockHell)}.cfg");
+      ModAPI.Log.Write($"{nameof(LocalFilePath)}: {LocalFilePath}");
       LocalConfigData = new Dictionary<string, Dictionary<string, string>>();
-      LoadOrCreateConfig(LocalFilePath);
+      ModAPI.Log.Write($"{nameof(LocalConfigData)} initialized!");     
+      InitConfig();
+      ModAPI.Log.Write($"{nameof(SimpleConfig)} instance ready");
     }
 
-    public void LoadOrCreateConfig(string filePath)
+    public void InitConfig()
     {
       try
       {
-        LocalFilePath = filePath;
-        if (string.IsNullOrWhiteSpace(LocalFilePath))
-        {
-          ModAPI.Log.Write($"Could not load config file: {nameof(SimpleConfig)} {nameof(LocalFilePath)}  was empty!");
-          return;
-        }
         if (!File.Exists(LocalFilePath))
         {
           File.Create(LocalFilePath);
-          ModAPI.Log.Write($"Created config file {LocalFilePath}");          
+          ModAPI.Log.Write($"Created config file {LocalFilePath}");
         }
-        if (LocalConfigData == null) 
+        LoadConfigurationFile();       
+      }
+      catch (Exception exc)
+      {
+        ModAPI.Log.Write(exc);        
+      }
+    }
+
+    private void LoadConfigurationFile()
+    {
+      try
+      {
+        foreach (string line in File.ReadAllLines(LocalFilePath))
         {
-          LocalConfigData = new Dictionary<string, Dictionary<string, string>>();
-        }
-        string[] lines = File.ReadAllLines(LocalFilePath);
-        foreach (string line in lines)
-        {
-          string currentSection = default;
+          string currentSection = string.Empty;
           string trimmedLine = line.Trim();
 
           if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith(';') || trimmedLine.StartsWith('#'))
@@ -55,7 +56,7 @@ namespace ShockHell.Data
 
           if (trimmedLine.StartsWith('[') && trimmedLine.EndsWith(']'))
           {
-            currentSection = trimmedLine.Substring(1, trimmedLine.Length - 2).Trim();           
+            currentSection = trimmedLine.Substring(1, trimmedLine.Length - 2).Trim();
           }
 
           if (!string.IsNullOrWhiteSpace(currentSection) && !LocalConfigData.ContainsKey(currentSection))
@@ -73,10 +74,11 @@ namespace ShockHell.Data
           }
 
         }
+        ModAPI.Log.Write($"Finished loading config file as {nameof(LocalConfigData)}");
       }
-      catch (System.Exception exc)
+      catch (Exception exc)
       {
-        ModAPI.Log.Write(exc);        
+        ModAPI.Log.Write(exc);
       }
     }
 
@@ -84,25 +86,24 @@ namespace ShockHell.Data
     {
       try
       {
-        if (string.IsNullOrWhiteSpace(LocalFilePath))
-        {
-          ModAPI.Log.Write($"Could not save config file: {nameof(SimpleConfig)} {nameof(LocalFilePath)}  was empty!");
-          return;
-        }
         using (StreamWriter writer = new StreamWriter(LocalFilePath))
         {
           foreach (var section in LocalConfigData)
           {
             writer.WriteLine($"[{section.Key}]");
+            ModAPI.Log.Write($"[{section.Key}]\n");
+
             foreach (var keyValuePair in section.Value)
             {
               writer.WriteLine($"{keyValuePair.Key}={keyValuePair.Value}");
+              ModAPI.Log.Write($"\t{keyValuePair.Key}={keyValuePair.Value}\n");
             }
             writer.WriteLine();
+            ModAPI.Log.Write($"\n");
           }
         }
       }
-      catch (System.Exception exc)
+      catch (Exception exc)
       {
         ModAPI.Log.Write(exc);
       }
