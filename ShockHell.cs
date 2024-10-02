@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
 
-namespace ShockHell
-{
+namespace ShockHell {
   /// <summary>
   /// The main mod class.
   /// </summary>
-  public class ShockHell : MonoBehaviour
-  {
+  public class ShockHell : MonoBehaviour {
     /// <summary>
     /// The main singleton instance.
     /// </summary>
@@ -20,74 +18,60 @@ namespace ShockHell
     /// Get the singleton reference to this <see cref="ShockHell"/> instance.
     /// </summary>
     /// <returns></returns>
-    public static ShockHell Get()
-    {
+    public static ShockHell Get() {
       return Instance;
     }
 
-    public ShockHell()
-    {
+    public ShockHell() {
       ///Flag to enable using GUILayout and GUI related functionality in Unity like OnGUI()
       useGUILayout = true;
       Instance = this;
     }
 
-    protected virtual void Awake()
-    {
+    protected virtual void Awake() {
       Instance = this;
     }
 
-    protected virtual void OnDestroy()
-    {
+    protected virtual void OnDestroy() {
       Instance = null;
     }
 
-    protected virtual void Start()
-    {
+    protected virtual void Start() {
       ///Initialize any locally used instance types in here, like your custom type, CursorManager, Player...
       ///to assure their existance and availability
       InitData();
     }
 
-    private void InitData()
-    {
+    private void InitData() {
       LocalShockHellGui = ShockHellGui.Get();
     }
 
-    protected virtual void Update()
-    {
-      if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(ShortcutKey))
-      {
+    protected virtual void Update() {
+      if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(ShortcutKey)) {
         InitData();
-        if (!ShowUI)
-        {          
+        if (!ShowUI) {
           LocalShockHellGui.EnableCursor(blockPlayer: true);
         }
         ToggleShowUI(0);
-        if (!ShowUI)
-        {
+        if (!ShowUI) {
           LocalShockHellGui.EnableCursor(blockPlayer: false);
         }
       }
     }
 
-    private void ToggleShowUI(int controlId)
-    {
-      switch (controlId)
-      {
+    private void ToggleShowUI(int controlId) {
+      switch (controlId) {
         case 0:
           ShowUI = !ShowUI;
-          return;     
+          return;
         default:
           ShowUI = !ShowUI;
           return;
       }
     }
 
-    protected virtual void OnGUI()
-    {
-      if (ShowUI)
-      {
+    protected virtual void OnGUI() {
+      if (ShowUI) {
         InitData();
         LocalShockHellGui.DrawGUI();
       }

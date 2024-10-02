@@ -5,10 +5,8 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace ShockHell.Managers
-{
-  public class PiShockManager : MonoBehaviour
-  {
+namespace ShockHell.Managers {
+  public class PiShockManager : MonoBehaviour {
     public string Username { get; set; } = "dDeepLb";
     public string Apikey { get; set; } = "a8be78db-0bc6-425a-9f3a-289e3137cbb2";
     public string Code { get; set; } = "2E86526CD40";
@@ -16,25 +14,21 @@ namespace ShockHell.Managers
     public byte[] ResponseData { get; private set; } = default;
     public SimpleConfig LocalSimpleConfig { get; private set; } = default;
 
-    private static readonly string ApiUrl = $"https://do.pishock.com/api/apioperate/";    
-  
+    private static readonly string ApiUrl = $"https://do.pishock.com/api/apioperate/";
+
     private static PiShockManager Instance;
-    
-    public PiShockManager()
-    {
+
+    public PiShockManager() {
       LocalSimpleConfig = new SimpleConfig();
       Instance = this;
     }
 
-    public static PiShockManager Get()
-    {
-      if (Instance == null)
-      {
+    public static PiShockManager Get() {
+      if (Instance == null) {
         Instance = FindObjectOfType<PiShockManager>();
-        if (Instance == null)
-        {
+        if (Instance == null) {
           ModAPI.Log.Write($"Instantiating {nameof(PiShockManager)}");
-          var go = new GameObject(nameof(PiShockManager));          
+          var go = new GameObject(nameof(PiShockManager));
           go.SetActive(true);
           Instance = go.AddComponent<PiShockManager>();
           DontDestroyOnLoad(go);
@@ -43,38 +37,32 @@ namespace ShockHell.Managers
       return Instance;
     }
 
-    protected virtual void Awake()
-    {
+    protected virtual void Awake() {
       Instance = this;
     }
 
-    protected virtual void OnDestroy()
-    {
+    protected virtual void OnDestroy() {
       Instance = null;
     }
 
-    protected virtual void Start()
-    {
+    protected virtual void Start() {
       /// Load any files, read configs etc
       /// and initialize any locally used instance types in here, like CursorManager, Player...
       ///to assure their existance and availability
       LoadAuthConfig();
     }
 
-    private void InitData()
-    {
-      if (LocalSimpleConfig == null)
-      {
+    private void InitData() {
+      if (LocalSimpleConfig == null) {
         LocalSimpleConfig = new SimpleConfig();
         ModAPI.Log.Write($"{nameof(PiShockManager)}.{nameof(LocalSimpleConfig)} instantiated!");
-      }      
+      }
     }
 
-    public void Shock(int intensity, int duration)
-    {
+    public void Shock(int intensity, int duration) {
       intensity = Mathf.Clamp(intensity, 1, 100);
       duration = Mathf.Clamp(duration, 1, 15);
-      var operation = (int)PiShockOperations.Shock;
+      var operation = (int) PiShockOperations.Shock;
 
       ModAPI.Log.Write($"Shock for {duration} seconds at {intensity} power");
       ModAPI.Log.Write("Starting Shock coroutine.");
@@ -98,11 +86,10 @@ namespace ShockHell.Managers
       ModAPI.Log.Write($"Response: {ResponseText}");
     }
 
-    public void Vibrate(int intensity, int duration)
-    {
+    public void Vibrate(int intensity, int duration) {
       intensity = Mathf.Clamp(intensity, 1, 100);
       duration = Mathf.Clamp(duration, 1, 15);
-      var operation = (int)PiShockOperations.Vibrate;
+      var operation = (int) PiShockOperations.Vibrate;
 
       ModAPI.Log.Write($"Vibrating for {duration} seconds at {intensity} power!");
       ModAPI.Log.Write("Starting Vibrate coroutine.");
@@ -121,15 +108,14 @@ namespace ShockHell.Managers
       ModAPI.Log.Write($"POST Request JSON" +
         $"\n{nameof(ApiUrl)}: {ApiUrl}" +
       $"\n{nameof(json)}: {json}");
-      
+
       StartCoroutine(SendPiShockRequest(json));
       ModAPI.Log.Write($"Response: {ResponseText}");
     }
 
-    public void Beep(int duration)
-    {
+    public void Beep(int duration) {
       duration = Mathf.Clamp(duration, 1, 15);
-      var operation = (int)PiShockOperations.Beep;
+      var operation = (int) PiShockOperations.Beep;
 
       ModAPI.Log.Write($"Beep for {duration} seconds!");
       ModAPI.Log.Write("Starting Beep coroutine.");
@@ -152,8 +138,7 @@ namespace ShockHell.Managers
       ModAPI.Log.Write($"Response: {ResponseText}");
     }
 
-    public void SaveAuthConfig()
-    {
+    public void SaveAuthConfig() {
       InitData();
       ModAPI.Log.Write("Saving PiShock Auth");
       LocalSimpleConfig.SetValue("Auth", nameof(Username), Username);
@@ -162,8 +147,7 @@ namespace ShockHell.Managers
       LocalSimpleConfig.SaveConfig();
     }
 
-    public void LoadAuthConfig()
-    {
+    public void LoadAuthConfig() {
       InitData();
       ModAPI.Log.Write("Loading PiShock Auth");
       LocalSimpleConfig.LoadConfig();
@@ -172,24 +156,19 @@ namespace ShockHell.Managers
       Code = LocalSimpleConfig.GetValue("Auth", nameof(Code), "");
     }
 
-    private IEnumerator SendPiShockRequest(string jsonReq)
-    {
+    private IEnumerator SendPiShockRequest(string jsonReq) {
       byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonReq);
-      UnityWebRequest uwr = new UnityWebRequest(ApiUrl, UnityWebRequest.kHttpVerbPOST)
-    {
+      UnityWebRequest uwr = new UnityWebRequest(ApiUrl, UnityWebRequest.kHttpVerbPOST) {
         uploadHandler = new UploadHandlerRaw(bodyRaw),
         downloadHandler = new DownloadHandlerBuffer()
       };
       uwr.SetRequestHeader("Content-Type", "application/json");
       yield return uwr.SendWebRequest();
 
-      if (uwr.result != UnityWebRequest.Result.Success)
-      {
+      if (uwr.result != UnityWebRequest.Result.Success) {
         ResponseText = uwr.error;
         ResponseData = uwr.downloadHandler.data;
-      }
-      else
-      {
+      } else {
         ResponseText = uwr.downloadHandler.text;
         ResponseData = uwr.downloadHandler.data;
       }
