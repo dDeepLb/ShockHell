@@ -57,7 +57,6 @@ namespace ShockHell.Managers
       /// Load any files, read configs etc
       /// and initialize any locally used instance types in here, like CursorManager, Player...
       ///to assure their existance and availability
-      InitData();
       LoadAuthConfig();
     }
 
@@ -77,12 +76,9 @@ namespace ShockHell.Managers
       var operation = PiShockOperations.Shock;
 
       ModAPI.Log.Write($"Shock for {duration} seconds at {intensity} power");
-
-      if (Instance != null)
-      {
-        ModAPI.Log.Write("Starting Shock coroutine.");
-        ModAPI.Log.Write("Sending PiShock Request");
-        List<IMultipartFormSection> formData = new List<IMultipartFormSection> {
+      ModAPI.Log.Write("Starting Shock coroutine.");
+      ModAPI.Log.Write("Sending PiShock Request");
+      List<IMultipartFormSection> formData = new List<IMultipartFormSection> {
             new MultipartFormDataSection(nameof(Username), Username),
             new MultipartFormDataSection(nameof(Apikey), Apikey),
             new MultipartFormDataSection(nameof(Code), Code),
@@ -92,23 +88,18 @@ namespace ShockHell.Managers
             new MultipartFormDataSection("Duration", duration.ToString())
         };
 
-        ModAPI.Log.Write($"POST Request form data" +
-          $"\n{nameof(ApiUrl)}: {ApiUrl}" +
-          $"\n{nameof(formData)}:" +
-          $"\n\t{nameof(Username)}: {Username}" +
-          $"\n\t{nameof(Apikey)}: {Apikey}" +
-          $"\n\t{nameof(Code)}: {Code}" +
-          $"\n\tName: {nameof(ShockHell)}" +
-          $"\n\tOp: {operation}" +
-          $"\n\tIntensity: {intensity}" +
-          $"\n\tDuration: : {duration}");
+      ModAPI.Log.Write($"POST Request form data" +
+        $"\n{nameof(ApiUrl)}: {ApiUrl}" +
+        $"\n{nameof(formData)}:" +
+        $"\n\t{nameof(Username)}: {Username}" +
+        $"\n\t{nameof(Apikey)}: {Apikey}" +
+        $"\n\t{nameof(Code)}: {Code}" +
+        $"\n\tName: {nameof(ShockHell)}" +
+        $"\n\tOp: {operation}" +
+        $"\n\tIntensity: {intensity}" +
+        $"\n\tDuration: : {duration}");
 
-        StartCoroutine(SendPiShockRequest(formData));
-      }
-      else
-      {
-        ModAPI.Log.Write("PiShockManager Instance is null!");
-      }
+      StartCoroutine(SendPiShockRequest(formData));
     }
 
     public void Vibrate(int intensity, int duration)
@@ -118,7 +109,6 @@ namespace ShockHell.Managers
       var operation = PiShockOperations.Vibrate;
 
       ModAPI.Log.Write($"Vibrating for {duration} seconds at {intensity} power!");
-
       ModAPI.Log.Write("Starting Vibrate coroutine.");
       ModAPI.Log.Write("Sending PiShock Request");
       List<IMultipartFormSection> formData = new List<IMultipartFormSection> {
@@ -152,7 +142,6 @@ namespace ShockHell.Managers
       var operation = PiShockOperations.Beep;
 
       ModAPI.Log.Write($"Beep for {duration} seconds!");
-
       ModAPI.Log.Write("Starting Beep coroutine.");
       ModAPI.Log.Write("Sending PiShock Request");
       List<IMultipartFormSection> formData = new List<IMultipartFormSection> {
@@ -193,7 +182,7 @@ namespace ShockHell.Managers
     {
       InitData();
       ModAPI.Log.Write("Loading PiShock Auth");
-      LocalSimpleConfig.InitConfig();
+      LocalSimpleConfig.LoadConfig();
       Username = LocalSimpleConfig.GetValue("Auth", nameof(Username), "");
       Apikey = LocalSimpleConfig.GetValue("Auth", nameof(Apikey), "");
       Code = LocalSimpleConfig.GetValue("Auth", nameof(Code), "");

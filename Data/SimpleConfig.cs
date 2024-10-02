@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System;
 using UnityEngine;
 
 namespace ShockHell.Data
@@ -19,93 +18,72 @@ namespace ShockHell.Data
       ModAPI.Log.Write($"{nameof(LocalFilePath)}: {LocalFilePath}");
       LocalConfigData = new Dictionary<string, Dictionary<string, string>>();
       ModAPI.Log.Write($"{nameof(LocalConfigData)} initialized!");     
-      InitConfig();
+      LoadConfig();
       ModAPI.Log.Write($"{nameof(SimpleConfig)} instance ready");
     }
 
-    public void InitConfig()
+    public void LoadConfig()
     {
-      try
+      if (!File.Exists(LocalFilePath))
       {
-        if (!File.Exists(LocalFilePath))
-        {
-          File.Create(LocalFilePath);
-          ModAPI.Log.Write($"Created config file {LocalFilePath}");
-        }
-        LoadConfigurationFile();       
+        File.Create(LocalFilePath);
+        ModAPI.Log.Write($"Created config file {LocalFilePath}");
       }
-      catch (Exception exc)
-      {
-        ModAPI.Log.Write(exc);        
-      }
+      LoadConfigurationFile();
     }
 
     private void LoadConfigurationFile()
     {
-      try
+      foreach (string line in File.ReadAllLines(LocalFilePath))
       {
-        foreach (string line in File.ReadAllLines(LocalFilePath))
+        string currentSection = string.Empty;
+        string trimmedLine = line.Trim();
+
+        if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith(';') || trimmedLine.StartsWith('#'))
         {
-          string currentSection = string.Empty;
-          string trimmedLine = line.Trim();
-
-          if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith(';') || trimmedLine.StartsWith('#'))
-          {
-            continue;
-          }
-
-          if (trimmedLine.StartsWith('[') && trimmedLine.EndsWith(']'))
-          {
-            currentSection = trimmedLine.Substring(1, trimmedLine.Length - 2).Trim();
-          }
-
-          if (!string.IsNullOrWhiteSpace(currentSection) && !LocalConfigData.ContainsKey(currentSection))
-          {
-            LocalConfigData[currentSection] = new Dictionary<string, string>();
-          }
-
-          if (!string.IsNullOrWhiteSpace(currentSection) && trimmedLine.Contains("="))
-          {
-            string[] kvp = trimmedLine.Split(new[] { '=' }, 2);
-            string key = kvp[0].Trim();
-            string value = kvp[1].Trim();
-
-            LocalConfigData[currentSection][key] = value;
-          }
-
+          continue;
         }
-        ModAPI.Log.Write($"Finished loading config file as {nameof(LocalConfigData)}");
+
+        if (trimmedLine.StartsWith('[') && trimmedLine.EndsWith(']'))
+        {
+          currentSection = trimmedLine.Substring(1, trimmedLine.Length - 2).Trim();
+        }
+
+        if (!string.IsNullOrWhiteSpace(currentSection) && !LocalConfigData.ContainsKey(currentSection))
+        {
+          LocalConfigData[currentSection] = new Dictionary<string, string>();
+        }
+
+        if (!string.IsNullOrWhiteSpace(currentSection) && trimmedLine.Contains("="))
+        {
+          string[] kvp = trimmedLine.Split(new[] { '=' }, 2);
+          string key = kvp[0].Trim();
+          string value = kvp[1].Trim();
+
+          LocalConfigData[currentSection][key] = value;
+        }
+
       }
-      catch (Exception exc)
-      {
-        ModAPI.Log.Write(exc);
-      }
+      ModAPI.Log.Write($"Finished loading config file as {nameof(LocalConfigData)}");
     }
 
     public void SaveConfig()
     {
-      try
+      using (StreamWriter writer = new StreamWriter(LocalFilePath))
       {
-        using (StreamWriter writer = new StreamWriter(LocalFilePath))
+        foreach (var section in LocalConfigData)
         {
-          foreach (var section in LocalConfigData)
-          {
-            writer.WriteLine($"[{section.Key}]");
-            ModAPI.Log.Write($"[{section.Key}]\n");
+          writer.WriteLine($"[{section.Key}]");
+          ModAPI.Log.Write($"[{section.Key}]\n");
 
-            foreach (var keyValuePair in section.Value)
-            {
-              writer.WriteLine($"{keyValuePair.Key}={keyValuePair.Value}");
-              ModAPI.Log.Write($"\t{keyValuePair.Key}={keyValuePair.Value}\n");
-            }
-            writer.WriteLine();
-            ModAPI.Log.Write($"\n");
+          foreach (var keyValuePair in section.Value)
+          {
+            writer.WriteLine($"{keyValuePair.Key}={keyValuePair.Value}");
+            ModAPI.Log.Write($"\t{keyValuePair.Key}={keyValuePair.Value}\n");
           }
+          writer.WriteLine();
+          ModAPI.Log.Write($"\n");
         }
-      }
-      catch (Exception exc)
-      {
-        ModAPI.Log.Write(exc);
       }
     }
 
