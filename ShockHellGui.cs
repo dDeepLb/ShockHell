@@ -1,6 +1,7 @@
 ﻿using ShockHell.Managers;
 using System;
 using UnityEngine;
+using static Mono.Security.X509.X520;
 
 namespace ShockHell
 {
@@ -155,55 +156,44 @@ namespace ShockHell
 
     private void ShockHellGuiManagerBox()
     {
-      using (new GUILayout.VerticalScope("API Connection", GUI.skin.box))
+      using (new GUILayout.VerticalScope(GUI.skin.box))
       {
-        GUILayout.Space(ShockHellGuiScreen.height * 0.02f);
-        using (new GUILayout.HorizontalScope())
+        GUILayout.Label("PiShock API Connection", GUI.skin.label);
+        using (new GUILayout.HorizontalScope(GUI.skin.box))
         {
-          GUILayout.Space(ShockHellGuiScreen.width / 2f - AuthBoxWidth / 2f);
-          using (new GUILayout.VerticalScope(GUI.skin.box, GUILayout.Width(AuthBoxWidth)))
-          {
-            using (new GUILayout.HorizontalScope())
-            {
-              using (new GUILayout.VerticalScope())
-              {
-                GUILayout.Label("PiShock Username");
-                GUILayout.Label("PiShock API Key");
-                GUILayout.Label("PiShock Code");
-              }
+          GUILayout.Label(nameof(LocalPiShockManager.Username), GUI.skin.label);
+          LocalPiShockManager.Username = GUILayout.TextField(LocalPiShockManager.Username, GUI.skin.textField, GUILayout.MaxWidth(50f));
+        }
+        using (new GUILayout.HorizontalScope(GUI.skin.box))
+        {
+          GUILayout.Label(nameof(LocalPiShockManager.Apikey), GUI.skin.label);
+          LocalPiShockManager.Apikey = GUILayout.TextField(LocalPiShockManager.Apikey, GUI.skin.textField, GUILayout.MaxWidth(50f));
+        }
+        using (new GUILayout.HorizontalScope(GUI.skin.box))
+        {
+          GUILayout.Label(nameof(LocalPiShockManager.Code), GUI.skin.label);
+          LocalPiShockManager.Code = GUILayout.TextField(LocalPiShockManager.Code, GUI.skin.textField, GUILayout.MaxWidth(50f));
+        }
+        if (GUILayout.Button("Save", GUI.skin.button, GUILayout.MaxWidth(200f)))
+        {
+          LocalPiShockManager.SaveAuthConfig();
+        }        
+      }
+      using (new GUILayout.VerticalScope(GUI.skin.box))
+      {
+        if (GUILayout.Button("Test with vibration", GUI.skin.button, GUILayout.MaxWidth(200f)))
+        {
+          LocalPiShockManager.Vibrate(50, 3);
+        }
 
-              using (new GUILayout.VerticalScope())
-              {
-                LocalPiShockManager.Username = GUILayout.TextField(LocalPiShockManager.Username, 32, GUI.skin.textField);
-                LocalPiShockManager.Apikey = GUILayout.TextField(LocalPiShockManager.Apikey, 36, GUI.skin.textField);
-                LocalPiShockManager.Code = GUILayout.TextField(LocalPiShockManager.Code, 32, GUI.skin.textField);
-              }
-            }
+        if (GUILayout.Button("Test with weak shock", GUI.skin.button, GUILayout.MaxWidth(200f)))
+        {
+          LocalPiShockManager.Shock(10, 1);
+        }
 
-            GUILayout.Space(ShockHellGuiScreen.height * 0.02f);
-
-            if (GUILayout.Button("Submit"))
-            {
-              LocalPiShockManager.SaveAuthConfig();
-            }
-
-            GUILayout.Space(ShockHellGuiScreen.height * 0.01f);
-
-            if (GUILayout.Button("Test with vibration"))
-            {
-              LocalPiShockManager.Vibrate(50, 3);
-            }
-
-            if (GUILayout.Button("Test with weak shock"))
-            {
-              LocalPiShockManager.Shock(10, 1);
-            }
-
-            if (GUILayout.Button("Test with beep"))
-            {
-              LocalPiShockManager.Beep(1);
-            }
-          }
+        if (GUILayout.Button("Test with beep", GUI.skin.button, GUILayout.MaxWidth(200f)))
+        {
+          LocalPiShockManager.Beep(1);
         }
       }
     }

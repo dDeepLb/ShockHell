@@ -10,9 +10,9 @@ namespace ShockHell.Managers
 {
   public class PiShockManager : MonoBehaviour
   {
-    public string Username { get; set; }
-    public string Apikey { get; set; }
-    public string Code { get; set; }
+    public string Username { get; set; } = string.Empty;
+    public string Apikey { get; set; } = string.Empty ;
+    public string Code { get; set; } = string.Empty;
 
     private static readonly string ApiUrl = $"https://do.pishock.com/api/apioperate/";
     private static readonly string LocalSimpleConfigPath = Path.Combine(Application.persistentDataPath, $"{nameof(ShockHell)}.cfg");
@@ -44,17 +44,7 @@ namespace ShockHell.Managers
 
     protected virtual void Awake()
     {
-      if (Instance == null)
-      {
-#pragma warning disable S2696 // Instance members should not write to "static" fields
-        Instance = this;
-#pragma warning restore S2696 // Instance members should not write to "static" fields
-        DontDestroyOnLoad(gameObject);
-      }
-      else if (Instance != this)
-      {
-        Destroy(gameObject);
-      }
+      Instance = this;
     }
 
     protected virtual void OnDestroy()
