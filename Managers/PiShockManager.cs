@@ -12,11 +12,13 @@ namespace ShockHell.Managers
     public string Username { get; set; } = string.Empty;
     public string Apikey { get; set; } = string.Empty ;
     public string Code { get; set; } = string.Empty;
+    public string ResponseText { get; private set; } = string.Empty;
+    public SimpleConfig LocalSimpleConfig { get; private set; } = default;
 
     private static readonly string ApiUrl = $"https://do.pishock.com/api/apioperate/";    
   
     private static PiShockManager Instance;
-    public SimpleConfig LocalSimpleConfig { get; private set; } = default;
+    
 
     public PiShockManager()
     {
@@ -190,21 +192,22 @@ namespace ShockHell.Managers
 
     private IEnumerator SendPiShockRequest(List<IMultipartFormSection> form)
     {
-      using (UnityWebRequest request = UnityWebRequest.Post(ApiUrl, form))
-      {
-        request.SetRequestHeader("Content-Type", "application/json");
-        yield return request.SendWebRequest();
+      UnityWebRequest uwr = UnityWebRequest.Post(ApiUrl, form);
+      uwr.SetRequestHeader("Content-Type", "application/json");
+      yield return uwr.SendWebRequest();
 
-        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-        {
-          ModAPI.Log.Write("Error: " + request.error);
-        }
-        else
-        {
-          ModAPI.Log.Write("Response: " + request.downloadHandler.text);
-          ModAPI.Log.Write("Response Headers" + request.GetResponseHeaders());
-        }
+      if (uwr.result == UnityWebRequest.Result.ConnectionError || uwr.result == UnityWebRequest.Result.ProtocolError)
+      {
+        ResponseText = uwr.error;
+        ModAPI.Log.Write($"Error: {ResponseText}");
       }
+      else
+      {
+        ResponseText = uwr.downloadHandler.text;
+        ModAPI.Log.Write($"Response: {ResponseText}");
+        ModAPI.Log.Write($"Response Headers: {uwr.GetResponseHeaders()}");
+      }
+
     }
   }
 }
