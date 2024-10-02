@@ -3,6 +3,7 @@ using ShockHell.Data.Enums;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -176,9 +177,13 @@ namespace ShockHell.Managers
 
     private IEnumerator SendPiShockRequest(string jsonReq)
     {
-      UnityWebRequest uwr = UnityWebRequest.Post(ApiUrl, jsonReq);
-      uwr.downloadHandler = new DownloadHandlerBuffer();
-     
+      byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonReq);
+      UnityWebRequest uwr = new UnityWebRequest(ApiUrl, UnityWebRequest.kHttpVerbPOST)
+      {
+        uploadHandler = new UploadHandlerRaw(bodyRaw),
+        downloadHandler = new DownloadHandlerBuffer()
+      };
+      uwr.SetRequestHeader("Content-Type", "application/json");
       yield return uwr.SendWebRequest();
 
       if (uwr.result != UnityWebRequest.Result.Success)
