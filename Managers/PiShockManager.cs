@@ -91,7 +91,7 @@ namespace ShockHell.Managers
       }}";
 
       ModAPI.Log.Write($"POST Request form data" +
-      $"\n{nameof(ApiUrl)}: {ApiUrl}" +
+        $"\n{nameof(ApiUrl)}: {ApiUrl}" +
       $"\n{nameof(json)}: {json}");
 
       StartCoroutine(SendPiShockRequest(json));
@@ -119,9 +119,9 @@ namespace ShockHell.Managers
       }}";
 
       ModAPI.Log.Write($"POST Request JSON" +
-      $"\n{nameof(ApiUrl)}: {ApiUrl}" +
+        $"\n{nameof(ApiUrl)}: {ApiUrl}" +
       $"\n{nameof(json)}: {json}");
-
+      
       StartCoroutine(SendPiShockRequest(json));
       ModAPI.Log.Write($"Response: {ResponseText}");
     }
@@ -145,7 +145,7 @@ namespace ShockHell.Managers
       }}";
 
       ModAPI.Log.Write($"POST Request JSON" +
-      $"\n{nameof(ApiUrl)}: {ApiUrl}" +
+        $"\n{nameof(ApiUrl)}: {ApiUrl}" +
       $"\n{nameof(json)}: {json}");
 
       StartCoroutine(SendPiShockRequest(json));
@@ -176,7 +176,7 @@ namespace ShockHell.Managers
     {
       byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonReq);
       UnityWebRequest uwr = new UnityWebRequest(ApiUrl, UnityWebRequest.kHttpVerbPOST)
-      {
+    {
         uploadHandler = new UploadHandlerRaw(bodyRaw),
         downloadHandler = new DownloadHandlerBuffer()
       };
@@ -185,7 +185,7 @@ namespace ShockHell.Managers
 
       if (uwr.result != UnityWebRequest.Result.Success)
       {
-        ResponseText = uwr.error;        
+        ResponseText = uwr.error;
         ResponseData = uwr.downloadHandler.data;
       }
       else

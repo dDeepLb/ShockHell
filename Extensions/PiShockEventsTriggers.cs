@@ -12,11 +12,12 @@ namespace ShockHell.Extensions
 
       if (m_HP > 0)
       {
-        PiShockManager.Get().Shock((int)damage, 7);
+        PiShockManager.Get().Shock((int)damage, 1);
       }
       else
       {
-        PiShockManager.Get().Shock(100, 7);
+        PiShockManager.Get().Shock(100, 1);
+        PiShockManager.Get().Shock(50, 3);
       }
     }
   }
