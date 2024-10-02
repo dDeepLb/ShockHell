@@ -2,7 +2,6 @@
 using ShockHell.Data.Enums;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -17,7 +16,7 @@ namespace ShockHell.Managers
     private static readonly string ApiUrl = $"https://do.pishock.com/api/apioperate/";    
   
     private static PiShockManager Instance;
-    private SimpleConfig LocalSimpleConfig;
+    public SimpleConfig LocalSimpleConfig { get; private set; } = default;
 
     public PiShockManager()
     {
@@ -32,7 +31,7 @@ namespace ShockHell.Managers
         Instance = FindObjectOfType<PiShockManager>();
         if (Instance == null)
         {
-          ModAPI.Log.Write("Instantiating PiShockManager");
+          ModAPI.Log.Write($"Instantiating {nameof(PiShockManager)}");
           var go = new GameObject(nameof(PiShockManager));          
           go.SetActive(true);
           Instance = go.AddComponent<PiShockManager>();
@@ -52,7 +51,7 @@ namespace ShockHell.Managers
       Instance = null;
     }
 
-    public void Start()
+    protected virtual void Start()
     {
       /// Load any files, read configs etc
       /// and initialize any locally used instance types in here, like CursorManager, Player...
@@ -133,6 +132,7 @@ namespace ShockHell.Managers
         $"\n\tDuration: : {duration}");
 
       StartCoroutine(SendPiShockRequest(formData));
+      
     }
 
     public void Beep(int duration)
@@ -192,6 +192,7 @@ namespace ShockHell.Managers
     {
       using (UnityWebRequest request = UnityWebRequest.Post(ApiUrl, form))
       {
+        request.SetRequestHeader("Content-Type", "application/json");
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
@@ -201,8 +202,7 @@ namespace ShockHell.Managers
         else
         {
           ModAPI.Log.Write("Response: " + request.downloadHandler.text);
-
-          ModAPI.Log.Write(request.GetResponseHeaders());
+          ModAPI.Log.Write("Response Headers" + request.GetResponseHeaders());
         }
       }
     }

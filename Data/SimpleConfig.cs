@@ -26,8 +26,10 @@ namespace ShockHell.Data
     {
       if (!File.Exists(LocalFilePath))
       {
-        File.Create(LocalFilePath);
-        ModAPI.Log.Write($"Created config file {LocalFilePath}");
+        using (var temp = File.Create(LocalFilePath))
+        {
+          ModAPI.Log.Write($"Created config file {LocalFilePath}");
+        }       
       }
       LoadConfigurationFile();
     }
@@ -74,15 +76,14 @@ namespace ShockHell.Data
         foreach (var section in LocalConfigData)
         {
           writer.WriteLine($"[{section.Key}]");
-          ModAPI.Log.Write($"[{section.Key}]\n");
+          ModAPI.Log.Write($"[{section.Key}]");
 
           foreach (var keyValuePair in section.Value)
           {
             writer.WriteLine($"{keyValuePair.Key}={keyValuePair.Value}");
-            ModAPI.Log.Write($"\t{keyValuePair.Key}={keyValuePair.Value}\n");
+            ModAPI.Log.Write($"\t{keyValuePair.Key}={keyValuePair.Value}");
           }
           writer.WriteLine();
-          ModAPI.Log.Write($"\n");
         }
       }
     }
