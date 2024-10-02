@@ -334,11 +334,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\Config.cs" />
-    <Compile Include="src\GUI.cs" />
-    <Compile Include="src\PiShockEventsTriggers.cs" />
-    <Compile Include="src\Main.cs" />
-    <Compile Include="src\PiShockManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Data\SimpleConfig.cs" />
+    <Compile Include="Data\Enums.cs" />
+    <Compile Include="ShockHellGui.cs" />
+    <Compile Include="Extensions\PiShockEventsTriggers.cs" />
+    <Compile Include="ShockHell.cs" />
+    <Compile Include="Managers\PiShockManager.cs" />
+    <Compile Include="Extensions\PlayerExtended.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

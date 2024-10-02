@@ -1,5 +1,13 @@
 <Mod ID="ShockHell">
   <Compatible>U#21.2</Compatible>
+  <Button Standard="NumPad1" ID="ShortcutKey">
+    <Name>
+      <EN>Press shortcut key LeftAlt +</EN>
+    </Name>
+    <Description>
+      <EN>to open the main mod screen</EN>
+    </Description>
+  </Button>
   <Name>
     <EN>ShockHell</EN>
   </Name>
