@@ -13,13 +13,13 @@ namespace ShockHell.Managers
     public string Apikey { get; set; } = string.Empty ;
     public string Code { get; set; } = string.Empty;
     public string ResponseText { get; private set; } = string.Empty;
+    public byte[] ResponseData { get; private set; } = default;
     public SimpleConfig LocalSimpleConfig { get; private set; } = default;
 
     private static readonly string ApiUrl = $"https://do.pishock.com/api/apioperate/";    
   
     private static PiShockManager Instance;
     
-
     public PiShockManager()
     {
       LocalSimpleConfig = new SimpleConfig();
@@ -79,7 +79,7 @@ namespace ShockHell.Managers
       ModAPI.Log.Write($"Shock for {duration} seconds at {intensity} power");
       ModAPI.Log.Write("Starting Shock coroutine.");
       ModAPI.Log.Write("Sending PiShock Request");
-      List<IMultipartFormSection> formData = new List<IMultipartFormSection> {
+      List<IMultipartFormSection> shockFormSections = new List<IMultipartFormSection> {
             new MultipartFormDataSection(nameof(Username), Username),
             new MultipartFormDataSection(nameof(Apikey), Apikey),
             new MultipartFormDataSection(nameof(Code), Code),
@@ -91,7 +91,7 @@ namespace ShockHell.Managers
 
       ModAPI.Log.Write($"POST Request form data" +
         $"\n{nameof(ApiUrl)}: {ApiUrl}" +
-        $"\n{nameof(formData)}:" +
+        $"\n{nameof(shockFormSections)}:" +
         $"\n\t{nameof(Username)}: {Username}" +
         $"\n\t{nameof(Apikey)}: {Apikey}" +
         $"\n\t{nameof(Code)}: {Code}" +
@@ -100,7 +100,7 @@ namespace ShockHell.Managers
         $"\n\tIntensity: {intensity}" +
         $"\n\tDuration: : {duration}");
 
-      StartCoroutine(SendPiShockRequest(formData));
+      StartCoroutine(SendPiShockRequest(shockFormSections));
       ModAPI.Log.Write($"Response: {ResponseText}");
     }
 
@@ -192,19 +192,22 @@ namespace ShockHell.Managers
       Code = LocalSimpleConfig.GetValue("Auth", nameof(Code), "");
     }
 
-    private IEnumerator SendPiShockRequest(List<IMultipartFormSection> form)
+    private IEnumerator SendPiShockRequest(List<IMultipartFormSection> formSections)
     {
-      UnityWebRequest uwr = UnityWebRequest.Post(ApiUrl, form);
-      uwr.SetRequestHeader("Content-Type", "application/json");
+      UnityWebRequest uwr = UnityWebRequest.Post(ApiUrl, formSections);
+      uwr.downloadHandler = new DownloadHandlerBuffer();
+     
       yield return uwr.SendWebRequest();
 
-      if (uwr.result == UnityWebRequest.Result.ConnectionError || uwr.result == UnityWebRequest.Result.ProtocolError)
+      if (uwr.result != UnityWebRequest.Result.Success)
       {
-        ResponseText = uwr.error;       
+        ResponseText = uwr.error;        
+        ResponseData = uwr.downloadHandler.data;
       }
       else
       {
-        ResponseText = uwr.downloadHandler.text;        
+        ResponseText = uwr.downloadHandler.text;
+        ResponseData = uwr.downloadHandler.data;
       }
     }
   }
