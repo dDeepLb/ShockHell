@@ -101,6 +101,7 @@ namespace ShockHell.Managers
         $"\n\tDuration: : {duration}");
 
       StartCoroutine(SendPiShockRequest(formData));
+      ModAPI.Log.Write($"Response: {ResponseText}");
     }
 
     public void Vibrate(int intensity, int duration)
@@ -134,7 +135,7 @@ namespace ShockHell.Managers
         $"\n\tDuration: : {duration}");
 
       StartCoroutine(SendPiShockRequest(formData));
-      
+      ModAPI.Log.Write($"Response: {ResponseText}");
     }
 
     public void Beep(int duration)
@@ -168,6 +169,7 @@ namespace ShockHell.Managers
         $"\n\tDuration: : {duration}");
 
       StartCoroutine(SendPiShockRequest(formData));
+      ModAPI.Log.Write($"Response: {ResponseText}");
     }
 
     public void SaveAuthConfig()
@@ -198,16 +200,12 @@ namespace ShockHell.Managers
 
       if (uwr.result == UnityWebRequest.Result.ConnectionError || uwr.result == UnityWebRequest.Result.ProtocolError)
       {
-        ResponseText = uwr.error;
-        ModAPI.Log.Write($"Error: {ResponseText}");
+        ResponseText = uwr.error;       
       }
       else
       {
-        ResponseText = uwr.downloadHandler.text;
-        ModAPI.Log.Write($"Response: {ResponseText}");
-        ModAPI.Log.Write($"Response Headers: {uwr.GetResponseHeaders()}");
+        ResponseText = uwr.downloadHandler.text;        
       }
-
     }
   }
 }
