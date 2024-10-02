@@ -1,20 +1,17 @@
 ﻿using ShockHell.Data;
 using ShockHell.Data.Enums;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 
 namespace ShockHell.Managers
 {
   public class PiShockManager : MonoBehaviour
   {
     public string Username { get; set; } = "dDeepLb";
-    public string Apikey { get; set; } = string.Empty ;
-    public string Code { get; set; } = string.Empty;
+    public string Apikey { get; set; } = "a8be78db-0bc6-425a-9f3a-289e3137cbb2";
+    public string Code { get; set; } = "2E86526CD40";
     public string ResponseText { get; private set; } = string.Empty;
     public byte[] ResponseData { get; private set; } = default;
     public SimpleConfig LocalSimpleConfig { get; private set; } = default;
