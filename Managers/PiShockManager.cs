@@ -1,5 +1,6 @@
 ﻿using ShockHell.Data;
 using ShockHell.Data.Enums;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -75,19 +76,18 @@ namespace ShockHell.Managers
     {
       intensity = Mathf.Clamp(intensity, 1, 100);
       duration = Mathf.Clamp(duration, 1, 15);
-      var operation = PiShockOperations.Shock;
+      var operation = (int)PiShockOperations.Shock;
 
       ModAPI.Log.Write($"Shock for {duration} seconds at {intensity} power");
       ModAPI.Log.Write("Starting Shock coroutine.");
       ModAPI.Log.Write("Sending PiShock Request");
-
       var json = $@"
       {{
         ""Username"": ""dDeepLb"",
         ""Apikey"": ""a8be78db-0bc6-425a-9f3a-289e3137cbb2"",
         ""Code"": ""2E86526CD40"",
         ""Name"": ""ShockHell"",
-        ""Op"": ""{EnumUtils<PiShockOperations>.GetValue(operation.ToString())}"",
+        ""Op"": ""{operation}"",
         ""Intensity"": ""{intensity}"",
         ""Duration"": ""{duration}""
       }}";
@@ -104,19 +104,18 @@ namespace ShockHell.Managers
     {
       intensity = Mathf.Clamp(intensity, 1, 100);
       duration = Mathf.Clamp(duration, 1, 15);
-      var operation = PiShockOperations.Vibrate;
+      var operation = (int)PiShockOperations.Vibrate;
 
       ModAPI.Log.Write($"Vibrating for {duration} seconds at {intensity} power!");
       ModAPI.Log.Write("Starting Vibrate coroutine.");
       ModAPI.Log.Write("Sending PiShock Request");
-
       var json = $@"
       {{
         ""Username"": ""dDeepLb"",
         ""Apikey"": ""a8be78db-0bc6-425a-9f3a-289e3137cbb2"",
         ""Code"": ""2E86526CD40"",
         ""Name"": ""ShockHell"",
-        ""Op"": ""{EnumUtils<PiShockOperations>.GetValue(operation.ToString())}"",
+        ""Op"": ""{operation}"",
         ""Intensity"": ""{intensity}"",
         ""Duration"": ""{duration}""
       }}";
@@ -132,19 +131,18 @@ namespace ShockHell.Managers
     public void Beep(int duration)
     {
       duration = Mathf.Clamp(duration, 1, 15);
-      var operation = PiShockOperations.Beep;
+      var operation = (int)PiShockOperations.Beep;
 
       ModAPI.Log.Write($"Beep for {duration} seconds!");
       ModAPI.Log.Write("Starting Beep coroutine.");
       ModAPI.Log.Write("Sending PiShock Request");
-
       var json = $@"
       {{
         ""Username"": ""dDeepLb"",
         ""Apikey"": ""a8be78db-0bc6-425a-9f3a-289e3137cbb2"",
         ""Code"": ""2E86526CD40"",
         ""Name"": ""ShockHell"",
-        ""Op"": ""{EnumUtils<PiShockOperations>.GetValue(operation.ToString())}"",
+        ""Op"": ""{operation}"",
         ""Duration"": ""{duration}""
       }}";
 
