@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using ShockHell.Data;
+using ShockHell.Data.Enums;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace ShockHell
+namespace ShockHell.Managers
 {
   public class PiShockManager : MonoBehaviour
   {
@@ -16,7 +18,7 @@ namespace ShockHell
     private static readonly string LocalSimpleConfigPath = Path.Combine(Application.persistentDataPath, $"{nameof(ShockHell)}.cfg");
     
     private static PiShockManager Instance;
-    private static SimpleConfig LocalSimpleConfig;
+    private SimpleConfig LocalSimpleConfig;
 
     public PiShockManager()
     {
@@ -71,7 +73,11 @@ namespace ShockHell
 
     private void InitData()
     {
-      LocalSimpleConfig = new SimpleConfig(LocalSimpleConfigPath);
+      if (LocalSimpleConfig == null)
+      {
+        LocalSimpleConfig = new SimpleConfig(LocalSimpleConfigPath);
+        ModAPI.Log.Write($"{nameof(PiShockManager)}.{nameof(LocalSimpleConfig)} instantiated!");
+      }      
     }
 
     public void Shock(int intensity, int duration)
@@ -110,19 +116,22 @@ namespace ShockHell
 
     public void SaveAuthConfig()
     {
+      InitData();
       ModAPI.Log.Write("Saving PiShock Auth");
-      LocalSimpleConfig.SetValue("Auth", "Username", Username);
-      LocalSimpleConfig.SetValue("Auth", "APIKey", Apikey);
-      LocalSimpleConfig.SetValue("Auth", "Code", Code);
+      LocalSimpleConfig.SetValue("Auth", nameof(Username), Username);
+      LocalSimpleConfig.SetValue("Auth", nameof(Apikey), Apikey);
+      LocalSimpleConfig.SetValue("Auth", nameof(Code), Code);
       LocalSimpleConfig.SaveConfig();
     }
 
     public void LoadAuthConfig()
     {
+      InitData();
       ModAPI.Log.Write("Loading PiShock Auth");
-      Username = LocalSimpleConfig.GetValue("Auth", "Username", "");
-      Apikey = LocalSimpleConfig.GetValue("Auth", "APIKey", "");
-      Code = LocalSimpleConfig.GetValue("Auth", "Code", "");
+      LocalSimpleConfig.LoadOrCreateConfig(LocalSimpleConfigPath);
+      Username = LocalSimpleConfig.GetValue("Auth", nameof(Username), "");
+      Apikey = LocalSimpleConfig.GetValue("Auth", nameof(Apikey), "");
+      Code = LocalSimpleConfig.GetValue("Auth", nameof(Code), "");
     }
 
     private IEnumerator SendPiShockRequest(PiShockOperations operation, int intensity, int duration)

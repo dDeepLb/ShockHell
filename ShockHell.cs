@@ -57,9 +57,29 @@ namespace ShockHell
     {
       if (Input.GetKeyDown(KeyCode.Backslash))
       {
-        ShowUI = !ShowUI;
+        InitData();
+        if (!ShowUI)
+        {          
+          LocalShockHellGui.EnableCursor(blockPlayer: true);
+        }
+        ToggleShowUI(0);
+        if (!ShowUI)
+        {
+          LocalShockHellGui.EnableCursor(blockPlayer: false);
+        }
+      }
+    }
 
-        LocalShockHellGui.EnableCursor(ShowUI);
+    private void ToggleShowUI(int controlId)
+    {
+      switch (controlId)
+      {
+        case 0:
+          ShowUI = !ShowUI;
+          return;     
+        default:
+          ShowUI = !ShowUI;
+          return;
       }
     }
 

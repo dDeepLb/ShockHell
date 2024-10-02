@@ -1,4 +1,6 @@
-﻿namespace ShockHell
+﻿using ShockHell.Managers;
+
+namespace ShockHell.Extensions
 {
   public class ConditionModuleTriggers : PlayerConditionModule
   {

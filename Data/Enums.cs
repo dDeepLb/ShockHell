@@ -1,4 +1,4 @@
-﻿namespace ShockHell
+﻿namespace ShockHell.Data.Enums
 {
   public enum PiShockOperations
   {

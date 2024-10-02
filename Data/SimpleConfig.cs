@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace ShockHell
+namespace ShockHell.Data
 {
   /// <summary>
   /// Represents a simple configuration
@@ -33,16 +33,16 @@ namespace ShockHell
           ModAPI.Log.Write($"Could not load config file: {nameof(SimpleConfig)} {nameof(LocalFilePath)}  was empty!");
           return;
         }
-        if (!File.Exists(filePath))
+        if (!File.Exists(LocalFilePath))
         {
-          File.Create(filePath);
-          ModAPI.Log.Write($"Created config file {filePath}");          
+          File.Create(LocalFilePath);
+          ModAPI.Log.Write($"Created config file {LocalFilePath}");          
         }
         if (LocalConfigData == null) 
         {
           LocalConfigData = new Dictionary<string, Dictionary<string, string>>();
         }
-        string[] lines = File.ReadAllLines(filePath);
+        string[] lines = File.ReadAllLines(LocalFilePath);
         foreach (string line in lines)
         {
           string currentSection = default;

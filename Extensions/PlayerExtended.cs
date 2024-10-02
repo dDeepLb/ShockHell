@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using ShockHell.Managers;
+using UnityEngine;
 
-namespace ShockHell
+namespace ShockHell.Extensions
 {
   class PlayerExtended : Player
   {
@@ -8,7 +9,6 @@ namespace ShockHell
     {
       base.Start();
 
-      ModAPI.Log.Write("Initing ShockHell");
       new GameObject($"__{nameof(PiShockManager)}__").AddComponent<PiShockManager>();      
       new GameObject($"__{nameof(ShockHell)}__").AddComponent<ShockHell>();
       new GameObject($"__{nameof(ShockHellGui)}__").AddComponent<ShockHellGui>();

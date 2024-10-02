@@ -335,13 +335,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\SimpleConfig.cs" />
-    <Compile Include="src\Enums.cs" />
-    <Compile Include="src\ShockHellGui.cs" />
-    <Compile Include="src\PiShockEventsTriggers.cs" />
-    <Compile Include="src\ShockHell.cs" />
-    <Compile Include="src\PiShockManager.cs" />
-    <Compile Include="src\PlayerExtended.cs" />
+    <Compile Include="Data\SimpleConfig.cs" />
+    <Compile Include="Data\Enums.cs" />
+    <Compile Include="ShockHellGui.cs" />
+    <Compile Include="Extensions\PiShockEventsTriggers.cs" />
+    <Compile Include="ShockHell.cs" />
+    <Compile Include="Managers\PiShockManager.cs" />
+    <Compile Include="Extensions\PlayerExtended.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
