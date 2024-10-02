@@ -12,6 +12,7 @@ namespace ShockHell
     /// </summary>
     private static ShockHell Instance;
     private bool ShowUI { get; set; } = false;
+    private KeyCode ShortcutKey { get; set; } = KeyCode.Keypad1;
 
     private static ShockHellGui LocalShockHellGui;
 
@@ -41,7 +42,7 @@ namespace ShockHell
       Instance = null;
     }
 
-    public void Start()
+    protected virtual void Start()
     {
       ///Initialize any locally used instance types in here, like your custom type, CursorManager, Player...
       ///to assure their existance and availability
@@ -55,7 +56,7 @@ namespace ShockHell
 
     protected virtual void Update()
     {
-      if (Input.GetKeyDown(KeyCode.Backslash))
+      if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(ShortcutKey))
       {
         InitData();
         if (!ShowUI)
