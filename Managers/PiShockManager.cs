@@ -4,12 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 namespace ShockHell.Managers
 {
   public class PiShockManager : MonoBehaviour
   {
-    public string Username { get; set; } = string.Empty;
+    public string Username { get; set; } = "dDeepLb";
     public string Apikey { get; set; } = string.Empty ;
     public string Code { get; set; } = string.Empty;
     public string ResponseText { get; private set; } = string.Empty;
@@ -79,28 +80,23 @@ namespace ShockHell.Managers
       ModAPI.Log.Write($"Shock for {duration} seconds at {intensity} power");
       ModAPI.Log.Write("Starting Shock coroutine.");
       ModAPI.Log.Write("Sending PiShock Request");
-      List<IMultipartFormSection> shockFormSections = new List<IMultipartFormSection> {
-            new MultipartFormDataSection(nameof(Username), Username),
-            new MultipartFormDataSection(nameof(Apikey), Apikey),
-            new MultipartFormDataSection(nameof(Code), Code),
-            new MultipartFormDataSection("Name", nameof(ShockHell)),
-            new MultipartFormDataSection("Op", operation.ToString()),
-            new MultipartFormDataSection("Intensity", intensity.ToString()),
-            new MultipartFormDataSection("Duration", duration.ToString())
-        };
+
+      var json = $@"
+      {{
+        ""Username"": ""dDeepLb"",
+        ""Apikey"": ""a8be78db-0bc6-425a-9f3a-289e3137cbb2"",
+        ""Code"": ""2E86526CD40"",
+        ""Name"": ""ShockHell"",
+        ""Op"": ""{EnumUtils<PiShockOperations>.GetValue(operation.ToString())}"",
+        ""Intensity"": ""{intensity}"",
+        ""Duration"": ""{duration}""
+      }}";
 
       ModAPI.Log.Write($"POST Request form data" +
-        $"\n{nameof(ApiUrl)}: {ApiUrl}" +
-        $"\n{nameof(shockFormSections)}:" +
-        $"\n\t{nameof(Username)}: {Username}" +
-        $"\n\t{nameof(Apikey)}: {Apikey}" +
-        $"\n\t{nameof(Code)}: {Code}" +
-        $"\n\tName: {nameof(ShockHell)}" +
-        $"\n\tOp: {operation}" +
-        $"\n\tIntensity: {intensity}" +
-        $"\n\tDuration: : {duration}");
+      $"\n{nameof(ApiUrl)}: {ApiUrl}" +
+      $"\n{nameof(json)}: {json}");
 
-      StartCoroutine(SendPiShockRequest(shockFormSections));
+      StartCoroutine(SendPiShockRequest(json));
       ModAPI.Log.Write($"Response: {ResponseText}");
     }
 
@@ -113,62 +109,50 @@ namespace ShockHell.Managers
       ModAPI.Log.Write($"Vibrating for {duration} seconds at {intensity} power!");
       ModAPI.Log.Write("Starting Vibrate coroutine.");
       ModAPI.Log.Write("Sending PiShock Request");
-      List<IMultipartFormSection> formData = new List<IMultipartFormSection> {
-            new MultipartFormDataSection(nameof(Username), Username),
-            new MultipartFormDataSection(nameof(Apikey), Apikey),
-            new MultipartFormDataSection(nameof(Code), Code),
-            new MultipartFormDataSection("Name", nameof(ShockHell)),
-            new MultipartFormDataSection("Op", operation.ToString()),
-            new MultipartFormDataSection("Intensity", intensity.ToString()),
-            new MultipartFormDataSection("Duration", duration.ToString())
-      };
 
-      ModAPI.Log.Write($"POST Request form data" +
-        $"\n{nameof(ApiUrl)}: {ApiUrl}" +
-        $"\n{nameof(formData)}:" +
-        $"\n\t{nameof(Username)}: {Username}" +
-        $"\n\t{nameof(Apikey)}: {Apikey}" +
-        $"\n\t{nameof(Code)}: {Code}" +
-        $"\n\tName: {nameof(ShockHell)}" +
-        $"\n\tOp: {operation}" +
-        $"\n\tIntensity: {intensity}" +
-        $"\n\tDuration: : {duration}");
+      var json = $@"
+      {{
+        ""Username"": ""dDeepLb"",
+        ""Apikey"": ""a8be78db-0bc6-425a-9f3a-289e3137cbb2"",
+        ""Code"": ""2E86526CD40"",
+        ""Name"": ""ShockHell"",
+        ""Op"": ""{EnumUtils<PiShockOperations>.GetValue(operation.ToString())}"",
+        ""Intensity"": ""{intensity}"",
+        ""Duration"": ""{duration}""
+      }}";
 
-      StartCoroutine(SendPiShockRequest(formData));
+      ModAPI.Log.Write($"POST Request JSON" +
+      $"\n{nameof(ApiUrl)}: {ApiUrl}" +
+      $"\n{nameof(json)}: {json}");
+
+      StartCoroutine(SendPiShockRequest(json));
       ModAPI.Log.Write($"Response: {ResponseText}");
     }
 
     public void Beep(int duration)
     {
-      int intensity = 0;
       duration = Mathf.Clamp(duration, 1, 15);
       var operation = PiShockOperations.Beep;
 
       ModAPI.Log.Write($"Beep for {duration} seconds!");
       ModAPI.Log.Write("Starting Beep coroutine.");
       ModAPI.Log.Write("Sending PiShock Request");
-      List<IMultipartFormSection> formData = new List<IMultipartFormSection> {
-       new MultipartFormDataSection(nameof(Username), Username),
-       new MultipartFormDataSection(nameof(Apikey), Apikey),
-       new MultipartFormDataSection(nameof(Code), Code),
-       new MultipartFormDataSection("Name", nameof(ShockHell)),
-       new MultipartFormDataSection("Op", operation.ToString()),
-       new MultipartFormDataSection("Intensity", intensity.ToString()),
-       new MultipartFormDataSection("Duration", duration.ToString())
-      };
 
-      ModAPI.Log.Write($"POST Request form data" +
-        $"\n{nameof(ApiUrl)}: {ApiUrl}" +
-        $"\n{nameof(formData)}:" +
-        $"\n\t{nameof(Username)}: {Username}" +
-        $"\n\t{nameof(Apikey)}: {Apikey}" +
-        $"\n\t{nameof(Code)}: {Code}" +
-        $"\n\tName: {nameof(ShockHell)}" +
-        $"\n\tOp: {operation}" +
-        $"\n\tIntensity: {intensity}" +
-        $"\n\tDuration: : {duration}");
+      var json = $@"
+      {{
+        ""Username"": ""dDeepLb"",
+        ""Apikey"": ""a8be78db-0bc6-425a-9f3a-289e3137cbb2"",
+        ""Code"": ""2E86526CD40"",
+        ""Name"": ""ShockHell"",
+        ""Op"": ""{EnumUtils<PiShockOperations>.GetValue(operation.ToString())}"",
+        ""Duration"": ""{duration}""
+      }}";
 
-      StartCoroutine(SendPiShockRequest(formData));
+      ModAPI.Log.Write($"POST Request JSON" +
+      $"\n{nameof(ApiUrl)}: {ApiUrl}" +
+      $"\n{nameof(json)}: {json}");
+
+      StartCoroutine(SendPiShockRequest(json));
       ModAPI.Log.Write($"Response: {ResponseText}");
     }
 
@@ -192,9 +176,9 @@ namespace ShockHell.Managers
       Code = LocalSimpleConfig.GetValue("Auth", nameof(Code), "");
     }
 
-    private IEnumerator SendPiShockRequest(List<IMultipartFormSection> formSections)
+    private IEnumerator SendPiShockRequest(string jsonReq)
     {
-      UnityWebRequest uwr = UnityWebRequest.Post(ApiUrl, formSections);
+      UnityWebRequest uwr = UnityWebRequest.Post(ApiUrl, jsonReq);
       uwr.downloadHandler = new DownloadHandlerBuffer();
      
       yield return uwr.SendWebRequest();

@@ -188,17 +188,17 @@ namespace ShockHell
         GUILayout.Label("PiShock Options", GUI.skin.label);
         if (GUILayout.Button("Vibrate", GUI.skin.button, GUILayout.MaxWidth(200f)))
         {
-          LocalPiShockManager.Vibrate(50, 3);
+          LocalPiShockManager.Vibrate(50, 7);
           ShowHUDBigInfo(HUDBigInfoMessage(LocalPiShockManager.ResponseText, MessageType.Info, DefaultGuiColor));
         }
         if (GUILayout.Button("Weak shock", GUI.skin.button, GUILayout.MaxWidth(200f)))
         {
-          LocalPiShockManager.Shock(10, 1);
+          LocalPiShockManager.Shock(50, 7);
           ShowHUDBigInfo(HUDBigInfoMessage(LocalPiShockManager.ResponseText, MessageType.Info, DefaultGuiColor));
         }
         if (GUILayout.Button("Beep", GUI.skin.button, GUILayout.MaxWidth(200f)))
         {
-          LocalPiShockManager.Beep(1);
+          LocalPiShockManager.Beep(7);
           ShowHUDBigInfo(HUDBigInfoMessage(LocalPiShockManager.ResponseText, MessageType.Info, DefaultGuiColor));
         }
       }
