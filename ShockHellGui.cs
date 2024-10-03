@@ -29,7 +29,7 @@ namespace ShockHell {
     private static float ShockHellGuiScreenStartPositionY { get; set; } = Screen.height / 2f;
     private static bool IsShockHellGuiScreenMinimized { get; set; } = false;
     private Color DefaultGuiColor = GUI.color;
-    private bool ShowShockHellGui { get; set; } = false;
+    public static bool ShowGui { get; set; } = false;
 
     public static Rect ShockHellGuiScreen = new Rect(ShockHellGuiScreenStartPositionX, ShockHellGuiScreenStartPositionY, ShockHellGuiScreenTotalWidth, ShockHellGuiScreenTotalHeight);
     private static CursorManager LocalCursorManager;
@@ -121,7 +121,7 @@ namespace ShockHell {
     }
 
     private void CloseWindow() {
-      ShowShockHellGui = false;
+      ShowGui = false;
       EnableCursor(false);
     }
 

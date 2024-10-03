@@ -9,7 +9,6 @@ namespace ShockHell {
     /// The main singleton instance.
     /// </summary>
     private static ShockHell Instance;
-    private bool ShowUI { get; set; } = false;
     private KeyCode ShortcutKey { get; set; } = KeyCode.Keypad1;
 
     private static ShockHellGui LocalShockHellGui;
@@ -49,11 +48,11 @@ namespace ShockHell {
     protected virtual void Update() {
       if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(ShortcutKey)) {
         InitData();
-        if (!ShowUI) {
+        if (!ShockHellGui.ShowGui) {
           LocalShockHellGui.EnableCursor(blockPlayer: true);
         }
         ToggleShowUI(0);
-        if (!ShowUI) {
+        if (!ShockHellGui.ShowGui) {
           LocalShockHellGui.EnableCursor(blockPlayer: false);
         }
       }
@@ -62,16 +61,16 @@ namespace ShockHell {
     private void ToggleShowUI(int controlId) {
       switch (controlId) {
         case 0:
-          ShowUI = !ShowUI;
+          ShockHellGui.ShowGui = !ShockHellGui.ShowGui;
           return;
         default:
-          ShowUI = !ShowUI;
+          ShockHellGui.ShowGui = !ShockHellGui.ShowGui;
           return;
       }
     }
 
     protected virtual void OnGUI() {
-      if (ShowUI) {
+      if (ShockHellGui.ShowGui) {
         InitData();
         LocalShockHellGui.DrawGUI();
       }
