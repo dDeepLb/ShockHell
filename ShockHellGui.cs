@@ -9,13 +9,12 @@ namespace ShockHell {
   /// eg to reference the player as Player.Get()
   /// </summary>
   public class ShockHellGui : MonoBehaviour {
-    /// <summary>
-    /// The main singleton instance.
-    /// </summary>
+    public static bool ShowGui { get; set; } = false;
+
     private static ShockHellGui Instance;
     private static readonly string ModName = nameof(ShockHellGui);
-    public int GuiScreenId;
-    public string GuiScreenTitle = $"{ModName} created by dDeepLb";
+    private static int GuiScreenId;
+    private static readonly string GuiScreenTitle = $"{ModName} created by dDeepLb";
     private static float AuthBoxWidth { get; set; } = GuiScreenTotalWidth / 4f;
     private static float GuiScreenTotalWidth { get; set; } = 700f;
     private static float GuiScreenTotalHeight { get; set; } = 350f;
@@ -26,10 +25,8 @@ namespace ShockHell {
     private static float GuiScreenStartPositionX { get; set; } = Screen.width / 2f;
     private static float GuiScreenStartPositionY { get; set; } = Screen.height / 2f;
     private static bool IsGuiScreenMinimized { get; set; } = false;
-    private Color DefaultGuiColor = GUI.color;
-    public static bool ShowGui { get; set; } = false;
-
-    public static Rect GuiScreen = new Rect(GuiScreenStartPositionX, GuiScreenStartPositionY, GuiScreenTotalWidth, GuiScreenTotalHeight);
+    private static Color DefaultGuiColor = GUI.color;
+    private static Rect GuiScreen = new Rect(GuiScreenStartPositionX, GuiScreenStartPositionY, GuiScreenTotalWidth, GuiScreenTotalHeight);
     private static CursorManager LocalCursorManager;
     private static Player LocalPlayer;
     private static HUDManager LocalHUDManager;
@@ -61,38 +58,39 @@ namespace ShockHell {
       ///Initialize any locally used instance types in here, like CursorManager, Player...
       ///to assure their existance and availability
       InitData();
+      GuiScreenId = GetHashCode();
     }
 
-    private void InitData() {
+    private static void InitData() {
       LocalCursorManager = CursorManager.Get();
       LocalPlayer = Player.Get();
       LocalHUDManager = HUDManager.Get();
       LocalPiShockManager = PiShockManager.Get();
     }
 
-    private void InitSkinUI() {
+    private static void InitSkinUI() {
       GUI.skin = ModAPI.Interface.Skin;
     }
 
-    public void DrawGUI() {
+    public static void DrawGUI() {
       InitData();
       InitSkinUI();
-      GuiScreenId = GetHashCode();
       GuiScreen = GUILayout.Window(
-                            GuiScreenId,
-                            GuiScreen,
-                            DrawWindow,
-                            GuiScreenTitle,
-                            GUI.skin.window,
-                            GUILayout.ExpandWidth(true),
-                            GUILayout.MinWidth(GuiScreenMinWidth),
-                            GUILayout.MaxWidth(GuiScreenMaxWidth),
-                            GUILayout.ExpandHeight(true),
-                            GUILayout.MinHeight(GuiScreenMinHeight),
-                            GUILayout.MaxHeight(GuiScreenMaxHeight));
+          GuiScreenId,
+          GuiScreen,
+          DrawWindow,
+          GuiScreenTitle,
+          GUI.skin.window,
+          GUILayout.ExpandWidth(true),
+          GUILayout.MinWidth(GuiScreenMinWidth),
+          GUILayout.MaxWidth(GuiScreenMaxWidth),
+          GUILayout.ExpandHeight(true),
+          GUILayout.MinHeight(GuiScreenMinHeight),
+          GUILayout.MaxHeight(GuiScreenMaxHeight)
+      );
     }
 
-    public void DrawWindow(int windowID) {
+    public static void DrawWindow(int windowID) {
       GuiScreenStartPositionX = GuiScreen.x;
       GuiScreenStartPositionY = GuiScreen.y;
       GuiScreenTotalWidth = GuiScreen.width;
@@ -106,7 +104,7 @@ namespace ShockHell {
       GUI.DragWindow(new Rect(0f, 0f, 10000f, 10000f));
     }
 
-    private void GuiScreenMenuBox() {
+    private static void GuiScreenMenuBox() {
       string CollapseButtonText = IsGuiScreenMinimized ? "O" : "-";
 
       if (GUI.Button(new Rect(GuiScreen.width - 40f, 0f, 20f, 20f), CollapseButtonText, GUI.skin.button)) {
@@ -118,12 +116,12 @@ namespace ShockHell {
       }
     }
 
-    private void CloseWindow() {
+    private static void CloseWindow() {
       ShowGui = false;
       EnableCursor(false);
     }
 
-    private void CollapseGuiWindow() {
+    private static void CollapseGuiWindow() {
       if (!IsGuiScreenMinimized) {
         GuiScreen = new Rect(GuiScreen.x, GuiScreen.y, GuiScreenTotalWidth, GuiScreenMinHeight);
         IsGuiScreenMinimized = true;
@@ -134,7 +132,7 @@ namespace ShockHell {
       DrawGUI();
     }
 
-    private void GuiManagerBox() {
+    private static void GuiManagerBox() {
       using (new GUILayout.VerticalScope(GUI.skin.box)) {
         GUILayout.Label("PiShock API Connection", GUI.skin.label);
         using (new GUILayout.HorizontalScope(GUI.skin.box)) {
@@ -174,7 +172,7 @@ namespace ShockHell {
     public static string HUDBigInfoMessage(string message, MessageType messageType, Color? headcolor = null)
       => $"<color=#{(headcolor != null ? ColorUtility.ToHtmlStringRGBA(headcolor.Value) : ColorUtility.ToHtmlStringRGBA(Color.red))}>{messageType}</color>\n{message}";
 
-    public void ShowHUDBigInfo(string text) {
+    public static void ShowHUDBigInfo(string text) {
       string header = $"{ModName} Info";
       string textureName = HUDInfoLogTextureType.Count.ToString();
 
@@ -190,7 +188,7 @@ namespace ShockHell {
       bigInfo.Show(true);
     }
 
-    public void EnableCursor(bool blockPlayer = false) {
+    public static void EnableCursor(bool blockPlayer = false) {
       LocalCursorManager.ShowCursor(blockPlayer);
 
       if (blockPlayer) {
