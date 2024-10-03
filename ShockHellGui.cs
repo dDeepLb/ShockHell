@@ -133,38 +133,47 @@ namespace ShockHell {
     }
 
     private static void GuiManagerBox() {
-      using (new GUILayout.VerticalScope(GUI.skin.box)) {
-        GUILayout.Label("PiShock API Connection", GUI.skin.label);
-        using (new GUILayout.HorizontalScope(GUI.skin.box)) {
-          GUILayout.Label(nameof(PiShockManager.Username), GUI.skin.label);
-          PiShockManager.Username = GUILayout.TextField(PiShockManager.Username, GUI.skin.textField, GUILayout.Width(200f));
-        }
-        using (new GUILayout.HorizontalScope(GUI.skin.box)) {
-          GUILayout.Label(nameof(PiShockManager.Apikey), GUI.skin.label);
-          PiShockManager.Apikey = GUILayout.TextField(PiShockManager.Apikey, GUI.skin.textField, GUILayout.Width(200f));
-        }
-        using (new GUILayout.HorizontalScope(GUI.skin.box)) {
-          GUILayout.Label(nameof(PiShockManager.Code), GUI.skin.label);
-          PiShockManager.Code = GUILayout.TextField(PiShockManager.Code, GUI.skin.textField, GUILayout.Width(200f));
-        }
-        if (GUILayout.Button("Save", GUI.skin.button, GUILayout.MaxWidth(200f))) {
-          LocalPiShockManager.SaveAuthConfig();
-          ShowHUDBigInfo(HUDBigInfoMessage($"Configuration saved to {LocalPiShockManager.LocalSimpleConfig?.filePath}", MessageType.Info, DefaultGuiColor));
-        }
-      }
-      using (new GUILayout.VerticalScope(GUI.skin.box)) {
-        GUILayout.Label("PiShock Options", GUI.skin.label);
-        if (GUILayout.Button("Vibrate", GUI.skin.button, GUILayout.MaxWidth(200f))) {
-          LocalPiShockManager.Vibrate(50, 3);
-          ShowHUDBigInfo(HUDBigInfoMessage(LocalPiShockManager.ResponseText, MessageType.Info, DefaultGuiColor));
-        }
-        if (GUILayout.Button("Weak shock", GUI.skin.button, GUILayout.MaxWidth(200f))) {
-          LocalPiShockManager.Shock(10, 1);
-          ShowHUDBigInfo(HUDBigInfoMessage(LocalPiShockManager.ResponseText, MessageType.Info, DefaultGuiColor));
-        }
-        if (GUILayout.Button("Beep", GUI.skin.button, GUILayout.MaxWidth(200f))) {
-          LocalPiShockManager.Beep(1);
-          ShowHUDBigInfo(HUDBigInfoMessage(LocalPiShockManager.ResponseText, MessageType.Info, DefaultGuiColor));
+      using (new GUILayout.HorizontalScope()) {
+        GUILayout.Space(AuthBoxWidth / 2);
+        using (new GUILayout.VerticalScope(GUI.skin.box, GUILayout.Width(AuthBoxWidth))) {
+          GUILayout.Label("PiShock API Connection", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter });
+          using (new GUILayout.HorizontalScope()) {
+            using (new GUILayout.VerticalScope()) {
+              GUILayout.Label("PiShock Username");
+              GUILayout.Label("PiShock API Key");
+              GUILayout.Label("PiShock Code");
+            }
+
+            using (new GUILayout.VerticalScope()) {
+              PiShockManager.Username = GUILayout.TextField(PiShockManager.Username, 32);
+              PiShockManager.Apikey = GUILayout.TextField(PiShockManager.Apikey, 36);
+              PiShockManager.Code = GUILayout.TextField(PiShockManager.Code, 32);
+            }
+          }
+
+          GUILayout.Space(GuiScreen.height * 0.02f);
+
+          if (GUILayout.Button("Save configuration")) {
+            LocalPiShockManager.SaveAuthConfig();
+            ShowHUDBigInfo(HUDBigInfoMessage($"Configuration saved to {LocalPiShockManager.LocalSimpleConfig?.filePath}", MessageType.Info, ShockHellGui.DefaultGuiColor));
+          }
+
+          GUILayout.Space(GuiScreen.height * 0.01f);
+
+          if (GUILayout.Button("Test with Vibration")) {
+            LocalPiShockManager.Vibrate(50, 3);
+            ShowHUDBigInfo(HUDBigInfoMessage(LocalPiShockManager.ResponseText, MessageType.Info, DefaultGuiColor));
+          }
+
+          if (GUILayout.Button("Test with weak shock")) {
+            LocalPiShockManager.Shock(10, 1);
+            ShowHUDBigInfo(HUDBigInfoMessage(LocalPiShockManager.ResponseText, MessageType.Info, DefaultGuiColor));
+          }
+
+          if (GUILayout.Button("Test with beep")) {
+            LocalPiShockManager.Beep(1);
+            ShowHUDBigInfo(HUDBigInfoMessage(LocalPiShockManager.ResponseText, MessageType.Info, DefaultGuiColor));
+          }
         }
       }
     }
