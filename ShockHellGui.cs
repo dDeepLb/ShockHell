@@ -16,22 +16,22 @@ namespace ShockHell {
     /// </summary>
     private static ShockHellGui Instance;
     private static readonly string ModName = nameof(ShockHellGui);
-    public int ShockHellGuiScreenId;
-    public string ShockHellGuiScreenTitle = $"{ModName} created by dDeepLb";
-    private static float AuthBoxWidth { get; set; } = ShockHellGuiScreenTotalWidth / 4f;
-    private static float ShockHellGuiScreenTotalWidth { get; set; } = 700f;
-    private static float ShockHellGuiScreenTotalHeight { get; set; } = 350f;
-    private static float ShockHellGuiScreenMinWidth { get; set; } = 700f;
-    private static float ShockHellGuiScreenMaxWidth { get; set; } = Screen.width;
-    private static float ShockHellGuiScreenMinHeight { get; set; } = 50f;
-    private static float ShockHellGuiScreenMaxHeight { get; set; } = Screen.height;
-    private static float ShockHellGuiScreenStartPositionX { get; set; } = Screen.width / 2f;
-    private static float ShockHellGuiScreenStartPositionY { get; set; } = Screen.height / 2f;
-    private static bool IsShockHellGuiScreenMinimized { get; set; } = false;
+    public int GuiScreenId;
+    public string GuiScreenTitle = $"{ModName} created by dDeepLb";
+    private static float AuthBoxWidth { get; set; } = GuiScreenTotalWidth / 4f;
+    private static float GuiScreenTotalWidth { get; set; } = 700f;
+    private static float GuiScreenTotalHeight { get; set; } = 350f;
+    private static float GuiScreenMinWidth { get; set; } = 700f;
+    private static float GuiScreenMaxWidth { get; set; } = Screen.width;
+    private static float GuiScreenMinHeight { get; set; } = 50f;
+    private static float GuiScreenMaxHeight { get; set; } = Screen.height;
+    private static float GuiScreenStartPositionX { get; set; } = Screen.width / 2f;
+    private static float GuiScreenStartPositionY { get; set; } = Screen.height / 2f;
+    private static bool IsGuiScreenMinimized { get; set; } = false;
     private Color DefaultGuiColor = GUI.color;
     public static bool ShowGui { get; set; } = false;
 
-    public static Rect ShockHellGuiScreen = new Rect(ShockHellGuiScreenStartPositionX, ShockHellGuiScreenStartPositionY, ShockHellGuiScreenTotalWidth, ShockHellGuiScreenTotalHeight);
+    public static Rect GuiScreen = new Rect(GuiScreenStartPositionX, GuiScreenStartPositionY, GuiScreenTotalWidth, GuiScreenTotalHeight);
     private static CursorManager LocalCursorManager;
     private static Player LocalPlayer;
     private static HUDManager LocalHUDManager;
@@ -79,43 +79,43 @@ namespace ShockHell {
     public void DrawGUI() {
       InitData();
       InitSkinUI();
-      ShockHellGuiScreenId = GetHashCode();
-      ShockHellGuiScreen = GUILayout.Window(
-                            ShockHellGuiScreenId,
-                            ShockHellGuiScreen,
+      GuiScreenId = GetHashCode();
+      GuiScreen = GUILayout.Window(
+                            GuiScreenId,
+                            GuiScreen,
                             DrawWindow,
-                            ShockHellGuiScreenTitle,
+                            GuiScreenTitle,
                             GUI.skin.window,
                             GUILayout.ExpandWidth(true),
-                            GUILayout.MinWidth(ShockHellGuiScreenMinWidth),
-                            GUILayout.MaxWidth(ShockHellGuiScreenMaxWidth),
+                            GUILayout.MinWidth(GuiScreenMinWidth),
+                            GUILayout.MaxWidth(GuiScreenMaxWidth),
                             GUILayout.ExpandHeight(true),
-                            GUILayout.MinHeight(ShockHellGuiScreenMinHeight),
-                            GUILayout.MaxHeight(ShockHellGuiScreenMaxHeight));
+                            GUILayout.MinHeight(GuiScreenMinHeight),
+                            GUILayout.MaxHeight(GuiScreenMaxHeight));
     }
 
     public void DrawWindow(int windowID) {
-      ShockHellGuiScreenStartPositionX = ShockHellGuiScreen.x;
-      ShockHellGuiScreenStartPositionY = ShockHellGuiScreen.y;
-      ShockHellGuiScreenTotalWidth = ShockHellGuiScreen.width;
+      GuiScreenStartPositionX = GuiScreen.x;
+      GuiScreenStartPositionY = GuiScreen.y;
+      GuiScreenTotalWidth = GuiScreen.width;
 
       using (new GUILayout.VerticalScope(GUI.skin.box)) {
-        ShockHellGuiScreenMenuBox();
-        if (!IsShockHellGuiScreenMinimized) {
-          ShockHellGuiManagerBox();
+        GuiScreenMenuBox();
+        if (!IsGuiScreenMinimized) {
+          GuiManagerBox();
         }
       }
       GUI.DragWindow(new Rect(0f, 0f, 10000f, 10000f));
     }
 
-    private void ShockHellGuiScreenMenuBox() {
-      string CollapseButtonText = IsShockHellGuiScreenMinimized ? "O" : "-";
+    private void GuiScreenMenuBox() {
+      string CollapseButtonText = IsGuiScreenMinimized ? "O" : "-";
 
-      if (GUI.Button(new Rect(ShockHellGuiScreen.width - 40f, 0f, 20f, 20f), CollapseButtonText, GUI.skin.button)) {
-        CollapseShockHellGuiWindow();
+      if (GUI.Button(new Rect(GuiScreen.width - 40f, 0f, 20f, 20f), CollapseButtonText, GUI.skin.button)) {
+        CollapseGuiWindow();
       }
 
-      if (GUI.Button(new Rect(ShockHellGuiScreen.width - 20f, 0f, 20f, 20f), "X", GUI.skin.button)) {
+      if (GUI.Button(new Rect(GuiScreen.width - 20f, 0f, 20f, 20f), "X", GUI.skin.button)) {
         CloseWindow();
       }
     }
@@ -125,18 +125,18 @@ namespace ShockHell {
       EnableCursor(false);
     }
 
-    private void CollapseShockHellGuiWindow() {
-      if (!IsShockHellGuiScreenMinimized) {
-        ShockHellGuiScreen = new Rect(ShockHellGuiScreen.x, ShockHellGuiScreen.y, ShockHellGuiScreenTotalWidth, ShockHellGuiScreenMinHeight);
-        IsShockHellGuiScreenMinimized = true;
+    private void CollapseGuiWindow() {
+      if (!IsGuiScreenMinimized) {
+        GuiScreen = new Rect(GuiScreen.x, GuiScreen.y, GuiScreenTotalWidth, GuiScreenMinHeight);
+        IsGuiScreenMinimized = true;
       } else {
-        ShockHellGuiScreen = new Rect(ShockHellGuiScreen.x, ShockHellGuiScreen.y, ShockHellGuiScreenTotalWidth, ShockHellGuiScreenTotalHeight);
-        IsShockHellGuiScreenMinimized = false;
+        GuiScreen = new Rect(GuiScreen.x, GuiScreen.y, GuiScreenTotalWidth, GuiScreenTotalHeight);
+        IsGuiScreenMinimized = false;
       }
       DrawGUI();
     }
 
-    private void ShockHellGuiManagerBox() {
+    private void GuiManagerBox() {
       using (new GUILayout.VerticalScope(GUI.skin.box)) {
         GUILayout.Label("PiShock API Connection", GUI.skin.label);
         using (new GUILayout.HorizontalScope(GUI.skin.box)) {
