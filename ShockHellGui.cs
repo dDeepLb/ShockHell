@@ -140,20 +140,20 @@ namespace ShockHell {
       using (new GUILayout.VerticalScope(GUI.skin.box)) {
         GUILayout.Label("PiShock API Connection", GUI.skin.label);
         using (new GUILayout.HorizontalScope(GUI.skin.box)) {
-          GUILayout.Label(nameof(LocalPiShockManager.Username), GUI.skin.label);
-          LocalPiShockManager.Username = GUILayout.TextField(LocalPiShockManager.Username, GUI.skin.textField, GUILayout.Width(200f));
+          GUILayout.Label(nameof(PiShockManager.Username), GUI.skin.label);
+          PiShockManager.Username = GUILayout.TextField(PiShockManager.Username, GUI.skin.textField, GUILayout.Width(200f));
         }
         using (new GUILayout.HorizontalScope(GUI.skin.box)) {
-          GUILayout.Label(nameof(LocalPiShockManager.Apikey), GUI.skin.label);
-          LocalPiShockManager.Apikey = GUILayout.TextField(LocalPiShockManager.Apikey, GUI.skin.textField, GUILayout.Width(200f));
+          GUILayout.Label(nameof(PiShockManager.Apikey), GUI.skin.label);
+          PiShockManager.Apikey = GUILayout.TextField(PiShockManager.Apikey, GUI.skin.textField, GUILayout.Width(200f));
         }
         using (new GUILayout.HorizontalScope(GUI.skin.box)) {
-          GUILayout.Label(nameof(LocalPiShockManager.Code), GUI.skin.label);
-          LocalPiShockManager.Code = GUILayout.TextField(LocalPiShockManager.Code, GUI.skin.textField, GUILayout.Width(200f));
+          GUILayout.Label(nameof(PiShockManager.Code), GUI.skin.label);
+          PiShockManager.Code = GUILayout.TextField(PiShockManager.Code, GUI.skin.textField, GUILayout.Width(200f));
         }
         if (GUILayout.Button("Save", GUI.skin.button, GUILayout.MaxWidth(200f))) {
           LocalPiShockManager.SaveAuthConfig();
-          ShowHUDBigInfo(HUDBigInfoMessage($"Configuration saved to {LocalPiShockManager?.LocalSimpleConfig?.LocalFilePath}", MessageType.Info, DefaultGuiColor));
+          ShowHUDBigInfo(HUDBigInfoMessage($"Configuration saved to {LocalPiShockManager.LocalSimpleConfig?.filePath}", MessageType.Info, DefaultGuiColor));
         }
       }
       using (new GUILayout.VerticalScope(GUI.skin.box)) {

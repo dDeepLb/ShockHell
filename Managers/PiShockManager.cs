@@ -1,25 +1,27 @@
 ﻿using ShockHell.Data;
 using ShockHell.Data.Enums;
 using System.Collections;
+using System.IO;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace ShockHell.Managers {
   public class PiShockManager : MonoBehaviour {
-    public string Username { get; set; } = "dDeepLb";
-    public string Apikey { get; set; } = "a8be78db-0bc6-425a-9f3a-289e3137cbb2";
-    public string Code { get; set; } = "2E86526CD40";
+    public static string Username { get; set; } = "dDeepLb";
+    public static string Apikey { get; set; } = "a8be78db-0bc6-425a-9f3a-289e3137cbb2";
+    public static string Code { get; set; } = "2E86526CD40";
     public string ResponseText { get; private set; } = string.Empty;
     public byte[] ResponseData { get; private set; } = default;
     public SimpleConfig LocalSimpleConfig { get; private set; } = default;
 
     private static readonly string ApiUrl = $"https://do.pishock.com/api/apioperate/";
+    private static readonly string configFilePath = Path.Combine(Application.dataPath.Replace("GH_Data", "Mods"), $"{nameof(ShockHell)}.cfg");
 
     private static PiShockManager Instance;
 
     public PiShockManager() {
-      LocalSimpleConfig = new SimpleConfig();
+      LocalSimpleConfig = new SimpleConfig(configFilePath);
       Instance = this;
     }
 
@@ -54,7 +56,7 @@ namespace ShockHell.Managers {
 
     private void InitData() {
       if (LocalSimpleConfig == null) {
-        LocalSimpleConfig = new SimpleConfig();
+        LocalSimpleConfig = new SimpleConfig(configFilePath);
         ModAPI.Log.Write($"{nameof(PiShockManager)}.{nameof(LocalSimpleConfig)} instantiated!");
       }
     }
@@ -115,9 +117,9 @@ namespace ShockHell.Managers {
     private static string CreateJsonPayload(int operation, int intensity, int duration) {
       return $@"
       {{
-        ""Username"": ""dDeepLb"",
-        ""Apikey"": ""a8be78db-0bc6-425a-9f3a-289e3137cbb2"",
-        ""Code"": ""2E86526CD40"",
+        ""Username"": ""{PiShockManager.Username}"",
+        ""Apikey"": ""{PiShockManager.Apikey}"",
+        ""Code"": ""{PiShockManager.Code}"",
         ""Name"": ""ShockHell"",
         ""Op"": ""{operation}"",
         ""Intensity"": ""{intensity}"",
