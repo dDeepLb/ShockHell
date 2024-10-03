@@ -168,13 +168,13 @@ namespace ShockHell {
 
           GUILayout.Space(GuiScreen.height * 0.01f);
 
-          if (GUILayout.Button("Test with Vibration")) {
-            LocalPiShockManager.Vibrate(50, 3);
+          if (GUILayout.Button("Test with weak shock")) {
+            LocalPiShockManager.Shock(10, 1);
             ShowHUDBigInfo(HUDBigInfoMessage(LocalPiShockManager.ResponseText, MessageType.Info, DefaultGuiColor));
           }
 
-          if (GUILayout.Button("Test with weak shock")) {
-            LocalPiShockManager.Shock(10, 1);
+          if (GUILayout.Button("Test with vibration")) {
+            LocalPiShockManager.Vibrate(50, 3);
             ShowHUDBigInfo(HUDBigInfoMessage(LocalPiShockManager.ResponseText, MessageType.Info, DefaultGuiColor));
           }
 
