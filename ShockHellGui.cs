@@ -31,6 +31,7 @@ namespace ShockHell {
     private static Player LocalPlayer;
     private static HUDManager LocalHUDManager;
     private static PiShockManager LocalPiShockManager;
+    private static readonly string PiShockMainPageLink = "https://pishock.com";
 
     public ShockHellGui() {
       ///Flag to enable using GUILayout and GUI related functionality in Unity like OnGUI()
@@ -137,6 +138,13 @@ namespace ShockHell {
         GUILayout.Space(AuthBoxWidth / 2);
         using (new GUILayout.VerticalScope(GUI.skin.box, GUILayout.Width(AuthBoxWidth))) {
           GUILayout.Label("PiShock API Connection", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter });
+          if (GUILayout.Button("Open PiShock page in browser")) {
+            Application.OpenURL(PiShockMainPageLink);
+          }
+          GUILayout.Label("On that page, on top, click 'API' -> 'API DOC' -> 'Authenticating'.\nIt has instructions where to find the values.");
+
+          GUILayout.Space(GuiScreen.height * 0.02f);
+
           using (new GUILayout.HorizontalScope()) {
             using (new GUILayout.VerticalScope()) {
               GUILayout.Label("PiShock Username");
