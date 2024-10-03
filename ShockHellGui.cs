@@ -1,8 +1,6 @@
 ﻿using ShockHell.Data.Enums;
 using ShockHell.Managers;
-using System;
 using UnityEngine;
-using static Mono.Security.X509.X520;
 
 namespace ShockHell {
   /// <summary>
